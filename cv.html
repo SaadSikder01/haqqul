@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>CV</title>
+    <!-- html2pdf for PDF download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #1a73e8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #222;
+            background: #e8ecf1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            font-size: 17px;
+            overflow-x: auto;
+        }
+        .cv-container {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            padding: 18mm 20mm;
+            box-shadow: 0 0 20px rgba(0,0,0,0.25);
+            margin-bottom: 20px;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+        @media print {
+            body { background: white; padding: 0; font-size: 17px; overflow-x: visible; }
+            .cv-container { box-shadow: none; margin: 0; width: 100%; min-height: auto; padding: 15mm; }
+            .action-buttons { display: none; }
+        }
+
+        .cv-main-title {
+            text-align: center;
+            font-style: italic;
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 2px;
+            color: #1a3b5c;
+        }
+        .cv-of {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; }
+        .header-left { flex: 1; min-width: 260px; }
+        .header-left h1 {
+            font-size: 38px;
+            color: var(--primary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header-left .profession { font-size: 21px; color: var(--accent); margin-bottom: 10px; font-weight: bold; }
+        .contact-info { font-size: 17px; color: #444; }
+        .contact-line { margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .photo-box {
+            width: 120px; height: 150px;
+            border: 2px solid #ccc;
+            overflow: hidden;
+            flex-shrink: 0;
+            margin-left: 20px;
+            border-radius: 6px;
+        }
+        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+        hr { border: none; border-top: 3px solid var(--accent); margin: 18px 0; }
+        .section { margin-bottom: 20px; }
+        .section h2 {
+            font-size: 23px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .objective p, .summary p, .skill-detail-text { font-size: 17px; line-height: 1.7; color: #333; }
+        .exp-item, .edu-item { margin-bottom: 16px; }
+        .exp-header, .edu-header { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 4px; }
+        .exp-title, .edu-degree { font-weight: bold; font-size: 18px; }
+        .exp-institute, .edu-school { font-style: italic; color: #555; font-size: 16px; }
+        .exp-date, .edu-year { color: #666; font-size: 16px; }
+        .exp-desc, .edu-grade { margin-top: 6px; font-size: 16px; line-height: 1.6; }
+        .skills-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .skill-tag {
+            background: #eef3ff;
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 16px;
+            border: 1px solid #ccd8f0;
+        }
+        .lang-table { width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px; }
+        .lang-table th, .lang-table td {
+            border: 1px solid #bbb;
+            padding: 10px 8px;
+            text-align: center;
+        }
+        .lang-table th { background: #f0f4ff; font-weight: bold; }
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 17px;
+        }
+        .details-grid .detail-item { display: flex; }
+        .details-grid .label { font-weight: bold; width: 170px; color: #333; }
+        .details-grid .value { color: #444; }
+        .full-width { grid-column: span 2; }
+        .signature-area {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .action-buttons button {
+            padding: 12px 28px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .edit-btn { background: #f0ad4e; color: white; }
+        .download-btn { background: #0d9e6c; color: white; }
+        .edit-btn:hover { background: #ec971f; }
+        .download-btn:hover { background: #0b7d55; }
+    </style>
+</head>
+<body>
+    <div class="action-buttons">
+        <button class="download-btn" id="downloadBtn">⬇️ Download as PDF</button>
+        <button class="edit-btn" onclick="window.location.href='index.html'">✏️ Edit Information</button>
+    </div>
+
+    <div class="cv-container" id="cvContent"></div>
+
+    <script>
+        (function() {
+            const data = JSON.parse(localStorage.getItem('cvData'));
+            if (!data || !data.fullName) {
+                alert("No CV data found. Please fill in your information first.");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const container = document.getElementById('cvContent');
+            let html = '';
+
+            html += '<div class="cv-main-title">Curriculum Vitae</div>';
+            html += '<div class="cv-of">of</div>';
+
+            // Header
+            html += '<div class="header">';
+            html += '<div class="header-left">';
+            html += `<h1>${escapeHTML(data.fullName)}</h1>`;
+            if (data.profession) html += `<div class="profession">${escapeHTML(data.profession)}</div>`;
+            html += '<div class="contact-info">';
+            if (data.email) html += `<div class="contact-line">📧 ${escapeHTML(data.email)}</div>`;
+            if (data.phone) html += `<div class="contact-line">📞 ${escapeHTML(data.phone)}</div>`;
+            if (data.location) html += `<div class="contact-line">📍 ${escapeHTML(data.location)}</div>`;
+            if (data.linkedin) html += `<div class="contact-line">🔗 <a href="${escapeHTML(data.linkedin)}" target="_blank">LinkedIn</a></div>`;
+            html += '</div></div>';
+            if (data.photo) {
+                html += `<div class="photo-box"><img src="${data.photo}" alt="Passport Photo"></div>`;
+            }
+            html += '</div><hr>';
+
+            // Objective
+            if (data.objective) {
+                html += '<div class="section"><h2>Objective</h2>';
+                html += `<div class="objective"><p>${escapeHTML(data.objective).replace(/\n/g, '<br>')}</p></div></div>`;
+            }
+
+            // Job Experience
+            if (data.experiences && data.experiences.length > 0) {
+                html += '<div class="section"><h2>Job Experience</h2>';
+                data.experiences.forEach(exp => {
+                    html += '<div class="exp-item">';
+                    html += '<div class="exp-header">';
+                    html += `<div class="exp-title">Job Name: ${escapeHTML(exp.title)}</div>`;
+                    html += `<div class="exp-date">${escapeHTML(exp.start)} - ${exp.currentJob ? 'Till Now' : escapeHTML(exp.end)}</div>`;
+                    html += '</div>';
+                    if (exp.institute) html += `<div class="exp-institute">Institute: ${escapeHTML(exp.institute)}</div>`;
+                    if (exp.description) html += `<div class="exp-desc">${escapeHTML(exp.description)}</div>`;
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            // Education
+            if (data.educations && data.educations.length > 0) {
+                html += '<div class="section"><h2>Education</h2>';
+                data.educations.forEach(edu => {
+                    html += '<div class="edu-item">';
+                    html += '<div class="edu-header">';
+                    html += `<div class="edu-degree">${escapeHTML(edu.degree)}</div>`;
+                    html += `<div class="edu-year">${escapeHTML(edu.year)}</div>`;
+                    html += '</div>';
+                    if (edu.school) html += `<div class="edu-school">${escapeHTML(edu.school)}</div>`;
+                    if (edu.grade) html += `<div class="edu-grade">Grade: ${escapeHTML(edu.grade)}</div>`;
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            // Generic Skills
+            if (data.skills && data.skills.length > 0) {
+                html += '<div class="section"><h2>Skills</h2><div class="skills-list">';
+                data.skills.forEach(skill => {
+                    html += `<div class="skill-tag">${escapeHTML(skill)}</div>`;
+                });
+                html += '</div></div>';
+            }
+
+            // Computer Skills
+            if (data.computerSkills) {
+                html += '<div class="section"><h2>Computer Skills</h2>';
+                html += `<div class="skill-detail-text">${escapeHTML(data.computerSkills).replace(/\n/g, '<br>')}</div></div>`;
+            }
+
+            // Driving License
+            if (data.drivingLicense) {
+                html += '<div class="section"><h2>Driving License</h2>';
+                html += `<div class="skill-detail-text">${escapeHTML(data.drivingLicense)}</div></div>`;
+            }
+
+            // Other Skills
+            if (data.otherSkills) {
+                html += '<div class="section"><h2>Other Skills</h2>';
+                html += `<div class="skill-detail-text">${escapeHTML(data.otherSkills).replace(/\n/g, '<br>')}</div></div>`;
+            }
+
+            // Language Skills
+            if (data.languages && data.languages.length > 0) {
+                html += '<div class="section"><h2>Language Skills</h2>';
+                html += '<table class="lang-table"><thead><tr><th>Language</th><th>Reading</th><th>Writing</th><th>Speaking</th></tr></thead><tbody>';
+                data.languages.forEach(lang => {
+                    html += `<tr><td>${escapeHTML(lang.name)}</td><td>${escapeHTML(lang.reading)}</td><td>${escapeHTML(lang.writing)}</td><td>${escapeHTML(lang.speaking)}</td></tr>`;
+                });
+                html += '</tbody></table></div>';
+            }
+
+            // Personal Details
+            html += '<div class="section"><h2>Personal Details</h2><div class="details-grid">';
+            if (data.fatherName) html += `<div class="detail-item"><span class="label">Father's Name</span><span class="value">: ${escapeHTML(data.fatherName)}</span></div>`;
+            if (data.motherName) html += `<div class="detail-item"><span class="label">Mother's Name</span><span class="value">: ${escapeHTML(data.motherName)}</span></div>`;
+            if (data.dob) html += `<div class="detail-item"><span class="label">Date of Birth</span><span class="value">: ${escapeHTML(data.dob)}</span></div>`;
+            if (data.bloodGroup) html += `<div class="detail-item"><span class="label">Blood Group</span><span class="value">: ${escapeHTML(data.bloodGroup)}</span></div>`;
+            if (data.gender) html += `<div class="detail-item"><span class="label">Gender</span><span class="value">: ${escapeHTML(data.gender)}</span></div>`;
+            if (data.maritalStatus) html += `<div class="detail-item"><span class="label">Marital Status</span><span class="value">: ${escapeHTML(data.maritalStatus)}</span></div>`;
+            if (data.nationality) html += `<div class="detail-item"><span class="label">Nationality</span><span class="value">: ${escapeHTML(data.nationality)}</span></div>`;
+            if (data.religion) html += `<div class="detail-item"><span class="label">Religion</span><span class="value">: ${escapeHTML(data.religion)}</span></div>`;
+            if (data.presentAddress) html += `<div class="detail-item full-width"><span class="label">Present Address</span><span class="value">: ${escapeHTML(data.presentAddress)}</span></div>`;
+            if (data.permanentAddress) html += `<div class="detail-item full-width"><span class="label">Permanent Address</span><span class="value">: ${escapeHTML(data.permanentAddress)}</span></div>`;
+            html += '</div></div>';
+
+            // Date & Signature
+            html += '<div class="signature-area">';
+            html += '<div class="left">Date: ____________________</div>';
+            html += '<div class="right">Signature: ____________________</div>';
+            html += '</div>';
+
+            container.innerHTML = html;
+
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // PDF Download
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const element = document.getElementById('cvContent');
+                const opt = {
+                    margin:       0,
+                    filename:     (data.fullName || 'CV') + '.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2 },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+            });
+        })();
+    </script>
+</body>
+</html>
