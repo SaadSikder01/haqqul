@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join With Us Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .join-container {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+        h2 {
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #636e72;
+            font-size: 14px;
+        }
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #dfe6e9;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: #0984e3;
+            box-shadow: 0 0 5px rgba(9, 132, 227, 0.3);
+            outline: none;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            main-top: 5px;
+        }
+        .radio-group label {
+            font-weight: normal;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        /* ডায়নামিক ইনপুট বক্সের স্টাইল */
+        #other-role-group {
+            display: none;
+            margin-top: 10px;
+        }
+        .form-group button {
+            background-color: #0984e3;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+        .form-group button:hover {
+            background-color: #0765b0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="join-container">
+        <h2>Join With Us </h2>
+        <form action="#" method="POST">
+            
+            <div class="form-group">
+                <label for="fullname">পূর্ণ নাম (Full Name):</label>
+                <input type="text" id="fullname" name="fullname" required placeholder="আপনার পুরো নাম লিখুন">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">ইমেইল ঠিকানা (Email Address):</label>
+                <input type="email" id="email" name="email" required placeholder="example@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">মোবাইল নম্বর (Phone Number):</label>
+                <input type="tel" id="phone" name="phone" required placeholder="০১xxxxxxxxX">
+            </div>
+
+            <div class="form-group">
+                <label>লিঙ্গ (Gender):</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="male" required> পুরুষ</label>
+                    <label><input type="radio" name="gender" value="female"> নারী</label>
+                    <label><input type="radio" name="gender" value="other"> অন্যান্য</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="role">আপনি কোন ক্যাটাগরিতে যুক্ত হতে চান?</label>
+                <select id="role" name="role" required onchange="checkOtherRole(this)">
+                    <option value="" disabled selected>ক্যাটাগরি সিলেক্ট করুন</option>
+                    <option value="member">সাধারণ সদস্য (General Member)</option>
+                    <option value="volunteer">স্বেচ্ছাসেবক (Volunteer)</option>
+                    <option value="developer">ডেভেলপার / টেক টিম (Developer)</option>
+                    <option value="content-creator">কন্টেন্ট রাইটার (Content Writer)</option>
+                    <option value="other">অন্যান্য (Other)</option>
+                </select>
+            </div>
+
+            <!-- অন্যান্য সিলেক্ট করলে এই ফিল্ডটি দেখা যাবে -->
+            <div class="form-group" id="other-role-group">
+                <label for="custom-role">আপনার ক্যাটাগরি লিখুন:</label>
+                <input type="text" id="custom-role" name="custom_role" placeholder="এখানে আপনার ক্যাটাগরি লিখুন">
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">সংক্ষিপ্ত বিবরণ বা অভিজ্ঞতা (Short Bio):</label>
+                <textarea id="bio" name="bio" rows="3" placeholder="আপনার সম্পর্কে বা অভিজ্ঞতা সম্পর্কে কিছু লিখুন..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit">যুক্ত হোন (Submit)</button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- জাভাস্ক্রিপ্ট কোড যা 'অন্যান্য' অপشن হ্যান্ডেল করবে -->
+    <script>
+      alert("ইহা একটি পরীক্ষামূলক পেইজ। এথায় পত্র পূর করিয়া প্রদান করিলে আপাতোতো কিছুই হইবে না। তবে আমরা ইহা কর্যকর করতে চেষ্টা চালাচ্ছি। বিস্তারিত জানতে এ্যাডমিনদের সাথে কথা বলুন ও আমাদের পাশেই থাকুন")
+        function checkOtherRole(select) {
+            const otherGroup = document.getElementById('other-role-group');
+            const customRoleInput = document.getElementById('custom-role');
+            
+            if (select.value === 'other') {
+                otherGroup.style.display = 'block';
+                customRoleInput.setAttribute('required', 'required'); // বাধ্যতামূলক করা হলো
+            } else {
+                otherGroup.style.display = 'none';
+                customRoleInput.removeAttribute('required');
+                customRoleInput.value = ''; // ফিল্ড রিসেট করা
+            }
+        }
+    </script>
+
+</body>
+</html>
