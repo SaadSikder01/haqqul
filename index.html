@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
 <link rel = "stylesheet" href = "earth.css">
 <style>
 body{
@@ -88,15 +88,23 @@ color:blue;
 margin-left:15%;
 margin-top:550px;
 }
-.slist{
-margin-top:600px;
-margin-left:20%;
-position:absolute;
-height:300px;
-width:60%;
-border:3px solid black;
-background:rgba(255,255,255,0.2);
-padding:8px;
+.slist {
+  margin-top: 600px;
+  margin-left: 20%;
+  position: absolute;
+  /* height: 300px; */ /* ফিক্সড হাইট বাদ দিলে ভালো হয়, যাতে বাটন বাড়লে নিচে জায়গা ছড়ায় */
+  min-height: 300px; /* সর্বনিম্ন হাইট */
+  width: 60%;
+  border: 3px solid black;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  padding: 15px;
+  
+  /* নতুন যুক্ত করা গ্রিড কোড */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* বাটনগুলো অটো কলামে সাজাবে */
+  gap: 12px; /* বাটনগুলোর মাঝখানের খালি জায়গা */
+  align-content: start;
 }
 button{
 HEIGHT:35PX;
@@ -116,11 +124,72 @@ border:2px solid green;
 margin-top:200px;
 text-align:center;
 }
+@media(max-width:480px){
+.earth{
+height: 50px;
+width:50px;
+margin-left:3%;
+margin-top:65%;
+}
+.slist{
+width:70%;
+margin-left:5%;
+margin-top:660px;
+}
+.wscreen{
+margin-left: 80%;
+margin-top: 80px;
+margin-left:10%;
+
+}
+.bgmobile{
+position:fixed;
+z-index:-1000;
+top:0;
+left:0;
+height:100%;
+width:100%;
+}
+.display{
+height:200px;
+width:250px;
+margin-left:10px;
+margin-top:70%;
+}
+.himage{
+height:200px;
+width:250px;
+opacity: 0.5;
+}
+}
+@media(min-width:480px){
+.bgmobile{
+display:none;
+}
+}
+@media(max-width:480px){
+.jwsbtn{
+position: absolute;
+z-index:100;
+width: 90px;
+margin-left:4px;
+}
+.appicon{
+margin-left: 50%;
+}
+}
+button:hover{
+background:pink;
+}
+button:active{
+background:red;
+}
 </style>
 </head>
 <body>
+<img src = "backgroundmobile.jpg" class = "bgmobile">
 <div class = "navbar">
-<button class = "jwsbtn">JOIN WITH US</button>
+<button class = "jwsbtn" onclick = "window.location.href = 'jws.html'">JOIN WITH US</button>
 <img src = "appicon.png" class = "appicon">
 <button class = "wtwbtn">WHY THIS WEBSITE?</button>
 </div>
@@ -217,15 +286,16 @@ text-align:center;
 <p id = "wscreen" style = "color:black; font-weight:bold; font-size:25px"></p>
 </div>
 <div class = "slist">
-<button>Creat Cv Online</button>
-<button>Join Virtual Class</button>
-<button>Rocket Science</button>
+<button onclick = "window.location.href = 'https://haqqul.pro.bd/cv/'">Creat Cv Online</button>
+<button onclick = "window.location.href = 'https://myclassbd.vercel.app/'">Join Virtual Class</button>
+<button >Rocket Science</button>
 <button>Student Portal</button>
 <button>Game</button>
-<button>Video Downloader</button>
+<button onclick = "window.location.href = 'https://litetube01.vercel.app/'" style = "font-size:12px">YouTube Video Downloader</button>
 <button>Messaging App</button>
-<button>Video As Background</button>
+<button onclick = "window.location.href = 'https://mywallpaper.vercel.app/'">Video As Background</button>
 <button>Lern Cyber Security</button>
+<button onclick = "window.location.href = 'https://naruto.pro.bd/'">Anime Hub</button>
 <button>Programming</button>
 <button>Build App/Software</button>
 <button>Web Development</button>
