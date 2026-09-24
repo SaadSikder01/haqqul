@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>কোডশালা — শিক্ষার্থীদের জন্য অ্যাপ ও সফটওয়্যার শেখার প্ল্যাটফর্ম</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a;
+    --bg-soft:#101728;
+    --card:rgba(255,255,255,.045);
+    --card-hover:rgba(255,255,255,.075);
+    --line:rgba(255,255,255,.09);
+    --primary:#7c5cff;
+    --accent:#00e0c6;
+    --pink:#ff5c8a;
+    --text:#e9edf7;
+    --muted:#93a1bb;
+    --radius:18px;
+    --grad:linear-gradient(135deg,#7c5cff 0%,#00e0c6 100%);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:90px}
+  body{
+    font-family:'Hind Siliguri',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.75;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Background glow ---------- */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(700px 500px at 12% -5%, rgba(124,92,255,.28), transparent 65%),
+      radial-gradient(650px 500px at 92% 8%, rgba(0,224,198,.18), transparent 65%),
+      radial-gradient(700px 600px at 50% 110%, rgba(255,92,138,.14), transparent 65%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+  /* ---------- Navbar ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    background:rgba(10,14,26,.72);
+    border-bottom:1px solid transparent;
+    transition:.35s;
+  }
+  header.scrolled{border-bottom-color:var(--line);background:rgba(10,14,26,.92)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.35rem;letter-spacing:.2px;text-decoration:none;color:var(--text)}
+  .logo-mark{
+    width:38px;height:38px;border-radius:11px;background:var(--grad);
+    display:grid;place-items:center;font-size:1.05rem;
+    box-shadow:0 8px 24px rgba(124,92,255,.45);
+  }
+  .logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .nav-links{display:flex;gap:6px;align-items:center}
+  .nav-links a{
+    color:var(--muted);text-decoration:none;font-size:.95rem;font-weight:500;
+    padding:9px 15px;border-radius:10px;transition:.25s;
+  }
+  .nav-links a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    padding:13px 28px;border-radius:12px;font-weight:600;font-size:.97rem;
+    text-decoration:none;cursor:pointer;border:none;font-family:inherit;
+    transition:.28s;white-space:nowrap;
+  }
+  .btn-primary{background:var(--grad);color:#070a14;box-shadow:0 10px 30px rgba(124,92,255,.35)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(124,92,255,.5)}
+  .btn-ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--line)}
+  .btn-ghost:hover{background:rgba(255,255,255,.11);transform:translateY(-3px)}
+  .btn-sm{padding:10px 20px;font-size:.9rem}
+
+  .burger{display:none;background:none;border:none;cursor:pointer;padding:8px;flex-direction:column;gap:5px}
+  .burger span{width:23px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:160px 0 100px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+
+  .pill{
+    display:inline-flex;align-items:center;gap:9px;
+    background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.35);
+    color:#c3b6ff;padding:7px 17px;border-radius:100px;font-size:.85rem;font-weight:500;
+    margin-bottom:24px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(0,224,198,.7);animation:pulse 2s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 9px rgba(0,224,198,0)}100%{box-shadow:0 0 0 0 rgba(0,224,198,0)}}
+
+  h1{
+    font-size:clamp(2.1rem,5vw,3.5rem);
+    line-height:1.28;font-weight:700;letter-spacing:-.5px;margin-bottom:22px;
+  }
+  h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .hero p.lead{font-size:1.08rem;color:var(--muted);max-width:520px;margin-bottom:34px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+
+  .hero-trust{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:.88rem}
+  .avatars{display:flex}
+  .avatars div{
+    width:34px;height:34px;border-radius:50%;border:2px solid var(--bg);
+    margin-left:-10px;display:grid;place-items:center;font-size:.8rem;font-weight:600;color:#0a0e1a;
+  }
+  .avatars div:first-child{margin-left:0}
+  .avatars div:nth-child(1){background:linear-gradient(135deg,#7c5cff,#a78bfa)}
+  .avatars div:nth-child(2){background:linear-gradient(135deg,#00e0c6,#4ade80)}
+  .avatars div:nth-child(3){background:linear-gradient(135deg,#ff5c8a,#fbbf24)}
+  .avatars div:nth-child(4){background:linear-gradient(135deg,#38bdf8,#7c5cff)}
+
+  /* ---------- Code window ---------- */
+  .code-window{
+    background:linear-gradient(180deg,#141b2e,#0e1424);
+    border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,.55), 0 0 0 1px rgba(124,92,255,.12);
+    transform:perspective(1200px) rotateY(-6deg) rotateX(3deg);
+    transition:.5s;
+  }
+  .code-window:hover{transform:perspective(1200px) rotateY(0) rotateX(0)}
+  .code-bar{
+    display:flex;align-items:center;gap:7px;padding:13px 16px;
+    background:rgba(255,255,255,.035);border-bottom:1px solid var(--line);
+  }
+  .code-bar i{width:11px;height:11px;border-radius:50%;display:block}
+  .code-bar i:nth-child(1){background:#ff5f57}
+  .code-bar i:nth-child(2){background:#febc2e}
+  .code-bar i:nth-child(3){background:#28c840}
+  .code-bar p{margin-left:12px;font-size:.78rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .code-window pre{
+    padding:22px;overflow-x:auto;
+    font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.85;
+    color:#c9d4e8;
+  }
+  .code-window pre::-webkit-scrollbar{height:6px}
+  .code-window pre::-webkit-scrollbar-thumb{background:#2a3550;border-radius:3px}
+  .t{color:#7c5cff}.a{color:#00e0c6}.s{color:#ffd166}.c{color:#5a6b8c}.k{color:#ff5c8a}
+
+  /* ---------- Stats ---------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+    margin-top:70px;padding:30px 26px;border-radius:var(--radius);
+    background:var(--card);border:1px solid var(--line);
+  }
+  .stat{text-align:center}
+  .stat h3{font-size:1.9rem;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.3}
+  .stat p{font-size:.88rem;color:var(--muted)}
+
+  /* ---------- Sections ---------- */
+  section{padding:96px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 56px}
+  .tag{
+    display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;
+    color:var(--accent);margin-bottom:14px;
+  }
+  h2{font-size:clamp(1.65rem,3.4vw,2.4rem);line-height:1.35;font-weight:700;margin-bottom:16px;letter-spacing:-.3px}
+  .sec-head p{color:var(--muted);font-size:1rem}
+
+  /* ---------- Course cards ---------- */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:30px 26px;transition:.32s;position:relative;overflow:hidden;
+  }
+  .card::after{
+    content:"";position:absolute;inset:0;border-radius:var(--radius);
+    background:var(--grad);opacity:0;transition:.32s;z-index:-1;
+  }
+  .card:hover{transform:translateY(-7px);background:var(--card-hover);border-color:rgba(124,92,255,.45);box-shadow:0 22px 50px rgba(0,0,0,.4)}
+  .card .icon{
+    width:54px;height:54px;border-radius:15px;display:grid;place-items:center;font-size:1.6rem;
+    margin-bottom:20px;background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.28);
+  }
+  .card:nth-child(2) .icon{background:rgba(0,224,198,.13);border-color:rgba(0,224,198,.28)}
+  .card:nth-child(3) .icon{background:rgba(255,92,138,.13);border-color:rgba(255,92,138,.28)}
+  .card:nth-child(4) .icon{background:rgba(56,189,248,.13);border-color:rgba(56,189,248,.28)}
+  .card:nth-child(5) .icon{background:rgba(251,191,36,.13);border-color:rgba(251,191,36,.28)}
+  .card:nth-child(6) .icon{background:rgba(167,139,250,.13);border-color:rgba(167,139,250,.28)}
+  .card h3{font-size:1.2rem;margin-bottom:10px;font-weight:600}
+  .card p{color:var(--muted);font-size:.93rem;margin-bottom:18px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-size:.76rem;padding:4px 11px;border-radius:100px;
+    background:rgba(255,255,255,.06);border:1px solid var(--line);color:#b9c5da;
+  }
+
+  /* ---------- Roadmap ---------- */
+  .roadmap{position:relative;max-width:800px;margin:0 auto}
+  .roadmap::before{
+    content:"";position:absolute;left:26px;top:12px;bottom:12px;width:2px;
+    background:linear-gradient(180deg,#7c5cff,#00e0c6,rgba(0,224,198,.05));
+  }
+  .step{display:flex;gap:26px;padding-bottom:38px;position:relative}
+  .step:last-child{padding-bottom:0}
+  .step-num{
+    flex-shrink:0;width:54px;height:54px;border-radius:16px;
+    display:grid;place-items:center;font-weight:700;font-size:1.05rem;
+    background:#141b2e;border:1px solid var(--line);color:var(--accent);
+    position:relative;z-index:2;
+  }
+  .step-body{
+    flex:1;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:22px 24px;transition:.3s;
+  }
+  .step-body:hover{border-color:rgba(0,224,198,.4);background:var(--card-hover);transform:translateX(6px)}
+  .step-body h3{font-size:1.1rem;margin-bottom:7px;font-weight:600}
+  .step-body p{color:var(--muted);font-size:.92rem}
+  .step-body .chip{margin-top:12px;display:inline-block}
+
+  /* ---------- Projects ---------- */
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .proj{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:24px 20px;transition:.3s;
+  }
+  .proj:hover{transform:translateY(-6px);border-color:rgba(255,92,138,.4);background:var(--card-hover)}
+  .proj .emoji{font-size:1.8rem;margin-bottom:12px;display:block}
+  .proj h4{font-size:1rem;margin-bottom:8px;font-weight:600}
+  .proj p{font-size:.85rem;color:var(--muted);margin-bottom:14px}
+  .level{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:100px;display:inline-block}
+  .lv-easy{background:rgba(0,224,198,.14);color:#5eead4;border:1px solid rgba(0,224,198,.3)}
+  .lv-mid{background:rgba(251,191,36,.14);color:#fcd34d;border:1px solid rgba(251,191,36,.3)}
+  .lv-hard{background:rgba(255,92,138,.14);color:#fda4af;border:1px solid rgba(255,92,138,.3)}
+
+  /* ---------- Resources ---------- */
+  .res-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:900px;margin:0 auto}
+  .res{
+    display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--text);
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:18px 22px;transition:.28s;
+  }
+  .res:hover{background:var(--card-hover);border-color:rgba(124,92,255,.45);transform:translateX(6px)}
+  .res .r-ico{
+    width:44px;height:44px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;
+    background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.25);font-size:1.2rem;
+  }
+  .res h4{font-size:.98rem;font-weight:600;margin-bottom:2px}
+  .res p{font-size:.82rem;color:var(--muted)}
+  .res .arrow{margin-left:auto;color:var(--muted);transition:.28s}
+  .res:hover .arrow{color:var(--accent);transform:translateX(4px)}
+
+  /* ---------- FAQ ---------- */
+  .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  .faq-item{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;transition:.3s;
+  }
+  .faq-item.open{border-color:rgba(124,92,255,.45);background:rgba(124,92,255,.06)}
+  .faq-q{
+    width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    background:none;border:none;color:var(--text);font-family:inherit;
+    font-size:1rem;font-weight:600;text-align:left;padding:20px 24px;cursor:pointer;
+  }
+  .faq-q .plus{
+    flex-shrink:0;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+    background:rgba(124,92,255,.16);color:var(--accent);font-size:1.1rem;transition:.3s;line-height:1;
+  }
+  .faq-item.open .plus{transform:rotate(45deg);background:rgba(0,224,198,.18)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .38s ease}
+  .faq-a p{padding:0 24px 22px;color:var(--muted);font-size:.93rem}
+
+  /* ---------- CTA ---------- */
+  .cta-box{
+    text-align:center;padding:64px 40px;border-radius:26px;
+    background:linear-gradient(135deg,rgba(124,92,255,.16),rgba(0,224,198,.10));
+    border:1px solid rgba(124,92,255,.3);position:relative;overflow:hidden;
+  }
+  .cta-box::before{
+    content:"";position:absolute;width:420px;height:420px;border-radius:50%;
+    background:radial-gradient(circle,rgba(124,92,255,.28),transparent 70%);
+    top:-200px;right:-120px;
+  }
+  .cta-box h2{margin-bottom:14px;position:relative}
+  .cta-box p{color:var(--muted);max-width:520px;margin:0 auto 32px;position:relative}
+  .cta-box .hero-cta{justify-content:center;margin-bottom:0;position:relative}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:56px 0 30px;margin-top:40px;position:relative;z-index:1}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
+  .foot-grid p{color:var(--muted);font-size:.9rem;margin-top:14px;max-width:280px}
+  .foot-col h4{font-size:.95rem;margin-bottom:16px;font-weight:600}
+  .foot-col a{display:block;color:var(--muted);text-decoration:none;font-size:.9rem;margin-bottom:10px;transition:.25s}
+  .foot-col a:hover{color:var(--accent);transform:translateX(3px)}
+  .foot-bottom{
+    border-top:1px solid var(--line);padding-top:24px;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    color:var(--muted);font-size:.85rem;
+  }
+
+  /* ---------- Reveal animation ---------- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:980px){
+    .hero-grid{grid-template-columns:1fr;gap:48px}
+    .code-window{transform:none}
+    .grid-3{grid-template-columns:repeat(2,1fr)}
+    .grid-4{grid-template-columns:repeat(2,1fr)}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:30px}
+    .stats{grid-template-columns:repeat(2,1fr);gap:26px}
+  }
+  @media(max-width:760px){
+    .nav-links{
+      position:absolute;top:74px;left:0;right:0;
+      flex-direction:column;align-items:stretch;gap:4px;
+      background:rgba(10,14,26,.98);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--line);padding:16px 22px 22px;
+      display:none;
+    }
+    .nav-links.show{display:flex}
+    .nav-links a{padding:12px 14px}
+    .nav-links .btn{margin-top:8px}
+    .burger{display:flex}
+    .hero{padding:130px 0 70px}
+    section{padding:70px 0}
+    .grid-3,.grid-4,.res-list{grid-template-columns:1fr}
+    .stats{padding:26px 18px}
+    .cta-box{padding:48px 24px}
+    .roadmap::before{left:20px}
+    .step{gap:18px}
+    .step-num{width:44px;height:44px;font-size:.95rem;border-radius:13px}
+    .foot-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header id="header">
+  <div class="wrap">
+    <nav>
+      <a href="#" class="logo">
+        <div class="logo-mark">⚡</div>
+        কোড<span>শালা</span>
+      </a>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#courses">কোর্স</a>
+        <a href="#roadmap">রোডম্যাপ</a>
+        <a href="#projects">প্রজেক্ট</a>
+        <a href="#resources">রিসোর্স</a>
+        <a href="#faq">প্রশ্নোত্তর</a>
+        <a href="#start" class="btn btn-primary btn-sm">ফ্রি শুরু করুন</a>
+      </div>
+
+      <button class="burger" id="burger" aria-label="মেনু">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="pill">
+          <span class="dot"></span> ১০০% ফ্রি · বাংলায় শেখা
+        </div>
+
+        <h1>শূন্য থেকে শিখুন <span class="g">অ্যাপ ও সফটওয়্যার</span> বানানো</h1>
+
+        <p class="lead">
+          স্টুডেন্টদের জন্য সহজ বাংলায় সাজানো সম্পূর্ণ লার্নিং প্ল্যাটফর্ম।
+          কোডিং না জানলেও সমস্যা নেই — একদম বেসিক থেকে শুরু করে নিজের
+          অ্যাপ বানানো পর্যন্ত পুরো রোডম্যাপ।
+        </p>
+
+        <div class="hero-cta">
+          <a href="#courses" class="btn btn-primary">🚀 শেখা শুরু করুন</a>
+          <a href="#roadmap" class="btn btn-ghost">📚 রোডম্যাপ দেখুন</a>
+        </div>
+
+        <div class="hero-trust">
+          <div class="avatars">
+            <div>স</div><div>র</div><div>ন</div><div>আ</div>
+          </div>
+          <span>ইতিমধ্যে <strong style="color:#e9edf7">৫,২০০+</strong> শিক্ষার্থী শিখছে</span>
+        </div>
+      </div>
+
+      <!-- Code window -->
+      <div class="code-window">
+        <div class="code-bar">
+          <i></i><i></i><i></i>
+          <p>hello.html</p>
+        </div>
+<pre><code><span class="c">&lt;!-- তোমার প্রথম অ্যাপ --&gt;</span>
+<span class="t">&lt;!DOCTYPE</span> <span class="a">html</span><span class="t">&gt;</span>
+<span class="t">&lt;html&gt;</span>
+  <span class="t">&lt;head&gt;</span>
+    <span class="t">&lt;title&gt;</span>আমার প্রথম অ্যাপ<span class="t">&lt;/title&gt;</span>
+  <span class="t">&lt;/head&gt;</span>
+  <span class="t">&lt;body&gt;</span>
+    <span class="t">&lt;h1&gt;</span>হ্যালো বাংলাদেশ! 👋<span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;button</span> <span class="a">onclick</span>=<span class="s">"alert('কাজ করছে!')"</span><span class="t">&gt;</span>
+      ক্লিক করো
+    <span class="t">&lt;/button&gt;</span>
+  <span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></code></pre>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats reveal">
+      <div class="stat"><h3>৬টি</h3><p>লার্নিং ট্র্যাক</p></div>
+      <div class="stat"><h3>৫০+</h3><p>প্রজেক্ট আইডিয়া</p></div>
+      <div class="stat"><h3>১২০+</h3><p>ভিডিও লেসন</p></div>
+      <div class="stat"><h3>১০০%</h3><p>ফ্রি রিসোর্স</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= COURSES ================= -->
+<section id="courses">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">কোর্স ট্র্যাক</div>
+      <h2>কোন পথে শিখবে, সেটা তুমি ঠিক করো</h2>
+      <p>প্রতিটি ট্র্যাক একদম বেসিক থেকে শুরু। কোনো পূর্ব অভিজ্ঞতার দরকার নেই।</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card reveal">
+        <div class="icon">🌐</div>
+        <h3>ওয়েব ডেভেলপমেন্ট</h3>
+        <p>ওয়েবসাইট বানানো শিখো একদম শুরু থেকে — ফ্রন্টএন্ড থেকে ব্যাকএন্ড পর্যন্ত।</p>
+        <div class="chips">
+          <span class="chip">HTML</span><span class="chip">CSS</span>
+          <span class="chip">JavaScript</span><span class="chip">React</span>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="icon">📱</div>
+        <h3>মোবাইল অ্যাপ</h3>
+        <p>Android ও iOS — এক কোডবেসে দুটোতেই চলবে এমন অ্যাপ বানাও।</p>
+        <div class="chips">
+          <span class="chip">Flutter</span><span class="chip">Dart</span>
+          <span class="chip">React Native</span>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="icon">🐍</div>
+        <h3>পাইথন ও সফটওয়্যার</h3>
+        <p>ডেস্কটপ সফটওয়্যার, অটোমেশন আর স্ক্রিপ্টিং শেখো পাইথন দিয়ে।</p>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">Tkinter</span>
+          <span class="chip">Automation</span>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="icon">🎨</div>
+        <h3>UI/UX ডিজাইন</h3>
+        <p>অ্যাপ দেখতে সুন্দর আর ব্যবহারে সহজ করতে শেখো ডিজাইনের মূল বিষয়গুলো।</p>
+        <div class="chips">
+          <span class="chip">Figma</span><span class="chip">Wireframe</span>
+          <span class="chip">Prototype</span>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="icon">🗄️</div>
+        <h3>ব্যাকএন্ড ও ডেটাবেস</h3>
+        <p>অ্যাপের পেছনের ইঞ্জিন — সার্ভার, API আর ডেটা সংরক্ষণ শেখো।</p>
+        <div class="chips">
+          <span class="chip">Node.js</span><span class="chip">Firebase</span>
+          <span class="chip">MongoDB</span>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="icon">🤖</div>
+        <h3>AI ও মেশিন লার্নিং</h3>
+        <p>স্মার্ট ফিচার যোগ করো তোমার অ্যাপে — AI-এর বেসিক ধারণা নাও।</p>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">TensorFlow</span>
+          <span class="chip">API</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">শেখার রোডম্যাপ</div>
+      <h2>৬ ধাপে হয়ে উঠো ডেভেলপার</h2>
+      <p>ধাপে ধাপে এগোলে ৬ মাসেই তুমি নিজের অ্যাপ বানাতে পারবে।</p>
+    </div>
+
+    <div class="roadmap">
+      <div class="step reveal">
+        <div class="step-num">০১</div>
+        <div class="step-body">
+          <h3>কম্পিউটার বেসিক ও লজিক</h3>
+          <p>কম্পিউটার কীভাবে কাজ করে, ফাইল-ফোল্ডার, ইন্টারনেট এবং প্রোগ্রামিং লজিকের ধারণা নাও।</p>
+          <span class="chip">২ সপ্তাহ</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">০২</div>
+        <div class="step-body">
+          <h3>HTML ও CSS</h3>
+          <p>নিজের প্রথম ওয়েবপেজ বানাও। টেক্সট, ছবি, রঙ, লেআউট — সব শিখে ফেলো।</p>
+          <span class="chip">৩ সপ্তাহ</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">০৩</div>
+        <div class="step-body">
+          <h3>JavaScript প্রোগ্রামিং</h3>
+          <p>ওয়েবসাইটে প্রাণ ঢালো — বাটন ক্লিক, ফর্ম, অ্যানিমেশন, ডেটা নিয়ে কাজ করা।</p>
+          <span class="chip">৫ সপ্তাহ</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">০৪</div>
+        <div class="step-body">
+          <h3>ফ্রেমওয়ার্ক (React / Flutter)</h3>
+          <p>আধুনিক টুল ব্যবহার করে দ্রুত ও পরিচ্ছন্নভাবে অ্যাপ বানানো শেখো।</p>
+          <span class="chip">৬ সপ্তাহ</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">০৫</div>
+        <div class="step-body">
+          <h3>ডেটাবেস ও API</h3>
+          <p>ইউজার ডেটা সংরক্ষণ করো, লগইন সিস্টেম বানাও, বাইরের সার্ভিসের সাথে সংযোগ দাও।</p>
+          <span class="chip">৪ সপ্তাহ</span>
+        </div>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">০৬</div>
+        <div class="step-body">
+          <h3>প্রজেক্ট ও পাবলিশিং</h3>
+          <p>নিজের সম্পূর্ণ প্রজেক্ট বানাও, GitHub-এ আপলোড করো এবং অ্যাপ স্টোরে পাবলিশ করো।</p>
+          <span class="chip">চলমান</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">প্রজেক্ট আইডিয়া</div>
+      <h2>শেখার সবচেয়ে ভালো উপায় — বানানো</h2>
+      <p>এই প্রজেক্টগুলো নিজে বানালে তুমি সত্যিই শিখে ফেলবে।</p>
+    </div>
+
+    <div class="grid-4">
+      <div class="proj reveal">
+        <span class="emoji">🧮</span>
+        <h4>ক্যালকুলেটর</h4>
+        <p>বেসিক অ্যাপের সবচেয়ে ভালো শুরু।</p>
+        <span class="level lv-easy">শুরু</span>
+      </div>
+
+      <div class="proj reveal">
+        <span class="emoji">✅</span>
+        <h4>টু-ডু লিস্ট</h4>
+        <p>কাজ সংরক্ষণ ও ডিলিট করার সিস্টেম।</p>
+        <span class="level lv-easy">শুরু</span>
+      </div>
+
+      <div class="proj reveal">
+        <span class="emoji">🌤️</span>
+        <h4>ওয়েদার অ্যাপ</h4>
+        <p>API থেকে ডেটা এনে আবহাওয়া দেখাও।</p>
+        <span class="level lv-mid">মধ্যম</span>
+      </div>
+
+      <div class="proj reveal">
+        <span class="emoji">💰</span>
+        <h4>খরচের হিসাব</h4>
+        <p>দৈনিক খরচ ট্র্যাক করার অ্যাপ।</p>
+        <span class="level lv-mid">মধ্যম</span>
+      </div>
+
+      <div class="proj reveal">
+        <span class="emoji">📝</span>
+        <h4>নোট অ্যাপ</h4>
+        <p>নোট লেখো, খোঁজো, সংরক্ষণ করো।</p>
+        <span class="level lv-mid">মধ্যম</span>
+      </div>
+
+      <div class="proj reveal">
+        <span class="emoji">🎓</span>
+        <h4>স্কুল ম্যানেজমেন্ট</h4>
+        <p>স্টুডেন্ট, রেজাল্ট ও উপস্থিতি।</p>
+        <span class="level lv-hard">অ্যাডভান্স</span>
+      </div>
+
+      <div class="proj reveal">
+        <span class="emoji">🛒</span>
+        <h4>ই-কমার্স অ্যাপ</h4>
+        <p>প্রোডাক্ট, কার্ট ও অর্ডার সিস্টেম।</p>
+        <span class="level lv-hard">অ্যাডভান্স</span>
+      </div>
+
+      <div class="proj reveal">
+        <span class="emoji">💬</span>
+        <h4>চ্যাট অ্যাপ</h4>
+        <p>রিয়েল-টাইম মেসেজিং সিস্টেম।</p>
+        <span class="level lv-hard">অ্যাডভান্স</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESOURCES ================= -->
+<section id="resources">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">ফ্রি রিসোর্স</div>
+      <h2>শেখার জন্য যা যা লাগবে</h2>
+      <p>সব রিসোর্স ফ্রি — কোনো টাকা খরচ না করেই শুরু করতে পারবে।</p>
+    </div>
+
+    <div class="res-list">
+      <a href="#" class="res reveal">
+        <div class="r-ico">📘</div>
+        <div>
+          <h4>বাংলায় প্রোগ্রামিং গাইড</h4>
+          <p>শূন্য থেকে শুরু করার সম্পূর্ণ নোট</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a href="#" class="res reveal">
+        <div class="r-ico">🎬</div>
+        <div>
+          <h4>ভিডিও লেসন</h4>
+          <p>হাতে-কলমে ধাপে ধাপে টিউটোরিয়াল</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a href="#" class="res reveal">
+        <div class="r-ico">💻</div>
+        <div>
+          <h4>অনলাইন কোড এডিটর</h4>
+          <p>ব্রাউজারেই কোড লিখে চালাও</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a href="#" class="res reveal">
+        <div class="r-ico">🧩</div>
+        <div>
+          <h4>প্র্যাকটিস সমস্যা</h4>
+          <p>লজিক তৈরির জন্য ২০০+ সমস্যা</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a href="#" class="res reveal">
+        <div class="r-ico">👥</div>
+        <div>
+          <h4>কমিউনিটি গ্রুপ</h4>
+          <p>সন্দেহ হলে প্রশ্ন করো সরাসরি</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <a href="#" class="res reveal">
+        <div class="r-ico">🎯</div>
+        <div>
+          <h4>ইন্টারভিউ প্রস্তুতি</h4>
+          <p>চাকরি/ইন্টার্নশিপের জন্য গাইড</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="tag">প্রশ্নোত্তর</div>
+      <h2>সাধারণ কিছু প্রশ্ন</h2>
+      <p>যা যা শিক্ষার্থীরা সবচেয়ে বেশি জিজ্ঞেস করে।</p>
+    </div>
+
+    <div class="faq">
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          আমার কোনো কোডিং অভিজ্ঞতা নেই, পারব তো?
+          <span class="plus">+</span>
+        </button>
+        <div class="faq-a">
+          <p>অবশ্যই পারবে। আমাদের প্রতিটি কোর্স একদম শূন্য থেকে শুরু হয়। কম্পিউটার চালাতে জানলেই যথেষ্ট — বাকিটা আমরা ধাপে ধাপে শিখিয়ে দেব।</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          শিখতে কী কী লাগবে?
+          <span class="plus">+</span>
+        </button>
+        <div class="faq-a">
+          <p>একটা কম্পিউটার (বা ল্যাপটপ) আর ইন্টারনেট সংযোগ। কোনো সফটওয়্যার কেনার দরকার নেই — সবকিছু ফ্রি টুল দিয়েই শেখানো হয়।</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          প্রতিদিন কত সময় দিতে হবে?
+          <span class="plus">+</span>
+        </button>
+        <div class="faq-a">
+          <p>দিনে মাত্র ১–২ ঘণ্টা নিয়মিত দিলেই যথেষ্ট। পড়াশোনার পাশাপাশি সহজেই শিখতে পারবে। ধারাবাহিকতা এখানে সবচেয়ে গুরুত্বপূর্ণ।</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          কোন ভাষা দিয়ে শুরু করা উচিত?
+          <span class="plus">+</span>
+        </button>
+        <div class="faq-a">
+          <p>ওয়েব ডেভেলপমেন্ট চাইলে HTML → CSS → JavaScript। অ্যাপ বানাতে চাইলে সরাসরি Flutter বা Python দিয়ে শুরু করতে পারো। বিভ্রান্ত হলে ওয়েব দিয়েই শুরু করো।</p>
+        </div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q">
+          শিখে কি আয় করা যাবে?
+          <span class="plus">+</span>
+        </button>
+        <div class="faq-a">
+          <p>হ্যাঁ। ফ্রিল্যান্সিং, টিউশন, ছোট ব্যবসার জন্য অ্যাপ বানানো বা ইন্টার্নশিপ — অনেক পথ আছে। তবে আগে দক্ষতা অর্জন করাই মূল লক্ষ্য হওয়া উচিত।</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section id="start">
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <h2>আজই শুরু করো তোমার ডেভেলপার যাত্রা 🚀</h2>
+      <p>আগামীকাল নয়, আজই প্রথম লাইন কোড লেখো। আমরা পুরো পথে তোমার সাথে আছি।</p>
+      <div class="hero-cta">
+        <a href="#courses" class="btn btn-primary">ফ্রি অ্যাকাউন্ট খুলুন</a>
+        <a href="#roadmap" class="btn btn-ghost">রোডম্যাপ ডাউনলোড</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="#" class="logo">
+          <div class="logo-mark">⚡</div>
+          কোড<span>শালা</span>
+        </a>
+        <p>শিক্ষার্থীদের জন্য বাংলায় অ্যাপ ও সফটওয়্যার শেখার ফ্রি প্ল্যাটফর্ম।</p>
+      </div>
+
+      <div class="foot-col">
+        <h4>কোর্স</h4>
+        <a href="#courses">ওয়েব ডেভেলপমেন্ট</a>
+        <a href="#courses">মোবাইল অ্যাপ</a>
+        <a href="#courses">পাইথন</a>
+        <a href="#courses">UI/UX ডিজাইন</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>রিসোর্স</h4>
+        <a href="#resources">ব্লগ</a>
+        <a href="#resources">ভিডিও লেসন</a>
+        <a href="#projects">প্রজেক্ট</a>
+        <a href="#faq">প্রশ্নোত্তর</a>
+      </div>
+
+      <div class="foot-col">
+        <h4>যোগাযোগ</h4>
+        <a href="#">ইমেইল</a>
+        <a href="#">ফেসবুক গ্রুপ</a>
+        <a href="#">ইউটিউব</a>
+        <a href="#">গিটহাব</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>© ২০২৫ কোডশালা। সর্বস্বত্ব সংরক্ষিত।</span>
+      <span>ভালোবাসা দিয়ে বানানো ❤️ বাংলাদেশে</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---------- Sticky header ----------
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // ---------- Mobile menu ----------
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => navLinks.classList.toggle('show'));
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('show'));
+  });
+
+  // ---------- Scroll reveal ----------
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = (i % 4) * 70 + 'ms';
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---------- FAQ accordion ----------
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      // বাকি সব বন্ধ করো
+      document.querySelectorAll('.faq-item').forEach(other => {
+        other.classList.remove('open');
+        other.querySelector('.faq-a').style.maxHeight = null;
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
