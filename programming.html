@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>কোডপথ বাংলা — প্রোগ্রামিং শেখার সহজ পথ</title>
+<meta name="description" content="শূন্য থেকে প্রোগ্রামিং শিখুন একদম বাংলায়। A to Z রোডম্যাপ, ফ্রি বাংলা PDF বই এবং ধাপে ধাপে গাইড।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ================= BASE ================= */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05070f;
+  --bg2:#0a0f1f;
+  --card:rgba(255,255,255,.045);
+  --card2:rgba(255,255,255,.075);
+  --stroke:rgba(255,255,255,.09);
+  --txt:#e9edfa;
+  --muted:#93a1bb;
+  --c1:#00e5ff;
+  --c2:#7c5cff;
+  --c3:#ff4d8d;
+  --grad:linear-gradient(135deg,#00e5ff 0%,#7c5cff 50%,#ff4d8d 100%);
+  --radius:18px;
+}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  font-family:'Hind Siliguri',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  overflow-x:hidden;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--c2);color:#fff}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#080c17}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--c1),var(--c2));border-radius:10px}
+
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+
+/* ================= BACKGROUND ================= */
+.bg-layer{position:fixed;inset:0;z-index:-3;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.42;animation:float 18s ease-in-out infinite}
+.orb.o1{width:520px;height:520px;background:#00e5ff;top:-160px;left:-140px}
+.orb.o2{width:460px;height:460px;background:#7c5cff;top:34%;right:-170px;animation-delay:-6s}
+.orb.o3{width:420px;height:420px;background:#ff4d8d;bottom:-160px;left:28%;animation-delay:-11s;opacity:.3}
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(60px,-50px) scale(1.12)}
+  66%{transform:translate(-50px,40px) scale(.93)}
+}
+.grid-bg{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 75% 65% at 50% 35%,#000 25%,transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 75% 65% at 50% 35%,#000 25%,transparent 78%);
+}
+#particles{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.pt{
+  position:absolute;font-family:'Fira Code',monospace;font-size:14px;
+  color:rgba(124,92,255,.5);user-select:none;
+  animation:rise linear infinite;
+}
+@keyframes rise{
+  0%{transform:translateY(0) rotate(0);opacity:0}
+  10%{opacity:.85}
+  90%{opacity:.55}
+  100%{transform:translateY(-110vh) rotate(360deg);opacity:0}
+}
+
+/* ================= PROGRESS ================= */
+.progress{
+  position:fixed;top:0;left:0;height:3px;width:0;z-index:999;
+  background:var(--grad);box-shadow:0 0 14px rgba(124,92,255,.9);
+  transition:width .1s linear;
+}
+
+/* ================= NAV ================= */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  transition:all .4s ease;
+}
+.nav.scrolled{
+  background:rgba(6,9,19,.78);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--stroke);
+}
+.nav-inner{
+  max-width:1220px;margin:0 auto;padding:16px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.18rem;font-weight:600;letter-spacing:.2px}
+.logo-mark{
+  font-family:'Fira Code',monospace;font-size:.95rem;font-weight:600;
+  background:var(--grad);color:#04060e;
+  padding:6px 10px;border-radius:10px;
+  box-shadow:0 0 22px rgba(124,92,255,.55);
+  animation:pulseGlow 3s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 0 18px rgba(124,92,255,.45)}
+  50%{box-shadow:0 0 34px rgba(0,229,255,.75)}
+}
+.logo b{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.links{display:flex;align-items:center;gap:26px;font-size:.95rem}
+.links a{color:var(--muted);position:relative;transition:color .25s;font-weight:500}
+.links a:not(.btn-sm)::after{
+  content:'';position:absolute;left:0;bottom:-6px;height:2px;width:0;
+  background:var(--grad);border-radius:2px;transition:width .3s ease;
+}
+.links a:not(.btn-sm):hover{color:#fff}
+.links a:not(.btn-sm):hover::after{width:100%}
+.btn-sm{
+  background:var(--grad);color:#04060e!important;font-weight:600;
+  padding:9px 20px;border-radius:50px;
+  box-shadow:0 6px 22px rgba(124,92,255,.4);
+  transition:transform .25s,box-shadow .25s;
+}
+.btn-sm:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,229,255,.55)}
+.menu-btn{
+  display:none;background:var(--card);border:1px solid var(--stroke);
+  color:#fff;font-size:1.3rem;width:42px;height:42px;border-radius:12px;cursor:pointer;
+}
+
+/* ================= HERO ================= */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:130px 22px 70px;position:relative;
+}
+.hero-inner{
+  max-width:1220px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(124,92,255,.13);border:1px solid rgba(124,92,255,.35);
+  color:#c4b5fd;padding:7px 16px;border-radius:50px;
+  font-size:.86rem;font-weight:500;margin-bottom:22px;
+}
+.badge .dot-live{
+  width:8px;height:8px;border-radius:50%;background:#22d3ee;
+  box-shadow:0 0 0 0 rgba(34,211,238,.7);animation:blip 1.8s infinite;
+}
+@keyframes blip{
+  0%{box-shadow:0 0 0 0 rgba(34,211,238,.7)}
+  70%{box-shadow:0 0 0 12px rgba(34,211,238,0)}
+  100%{box-shadow:0 0 0 0 rgba(34,211,238,0)}
+}
+.hero h1{
+  font-size:clamp(2.1rem,5.2vw,3.6rem);
+  line-height:1.28;font-weight:700;letter-spacing:-.5px;margin-bottom:18px;
+}
+.grad-text{
+  background:var(--grad);background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shine 5s linear infinite;
+}
+@keyframes shine{to{background-position:200% center}}
+.typed-wrap{display:block;min-height:1.3em}
+#typed{color:var(--c1);border-right:3px solid var(--c1);padding-right:4px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{border-color:transparent}}
+.hero p.lead{color:var(--muted);font-size:1.06rem;max-width:560px;margin-bottom:32px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:36px}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:14px 30px;border-radius:50px;font-weight:600;font-size:1rem;
+  cursor:pointer;border:none;transition:all .3s cubic-bezier(.2,.8,.3,1);
+}
+.btn-primary{
+  background:var(--grad);color:#04060e;background-size:200% auto;
+  box-shadow:0 10px 30px rgba(124,92,255,.45);
+}
+.btn-primary:hover{background-position:right center;transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,229,255,.5)}
+.btn-ghost{
+  background:var(--card);color:var(--txt);border:1px solid var(--stroke);
+  backdrop-filter:blur(10px);
+}
+.btn-ghost:hover{background:var(--card2);border-color:rgba(124,92,255,.6);transform:translateY(-3px)}
+
+.hero-mini{display:flex;gap:30px;flex-wrap:wrap}
+.mini-item{display:flex;flex-direction:column}
+.mini-item b{font-size:1.5rem;font-family:'Fira Code',monospace;color:#fff}
+.mini-item span{font-size:.82rem;color:var(--muted)}
+
+/* code window */
+.code-window{
+  background:rgba(10,14,28,.85);
+  border:1px solid var(--stroke);border-radius:16px;
+  overflow:hidden;backdrop-filter:blur(14px);
+  box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 1px rgba(124,92,255,.12) inset;
+  animation:floatCard 7s ease-in-out infinite;
+}
+@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.cw-top{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;background:rgba(255,255,255,.035);
+  border-bottom:1px solid var(--stroke);
+}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot.red{background:#ff5f57}.dot.yellow{background:#febc2e}.dot.green{background:#28c840}
+.cw-title{margin-left:auto;font-family:'Fira Code',monospace;font-size:.78rem;color:var(--muted)}
+.cw-body{
+  padding:20px;font-family:'Fira Code',monospace;
+  font-size:.87rem;line-height:1.85;color:#a9b8d8;
+  white-space:pre-wrap;word-break:break-word;min-height:290px;
+}
+.cw-body .cm{color:#5f7194}
+.cw-body .kw{color:#ff79c6}
+.cw-body .fn{color:#8be9fd}
+.cw-body .st{color:#f1fa8c}
+.cw-body .nm{color:#bd93f9}
+.caret{display:inline-block;width:9px;height:1.05em;background:var(--c1);vertical-align:-3px;animation:blink 1s step-end infinite}
+
+/* ================= MARQUEE ================= */
+.marquee{
+  border-top:1px solid var(--stroke);border-bottom:1px solid var(--stroke);
+  background:rgba(255,255,255,.02);overflow:hidden;padding:16px 0;position:relative;
+}
+.marquee::before,.marquee::after{
+  content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;
+}
+.marquee::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.marquee::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent)}
+.marquee-track{display:flex;gap:44px;width:max-content;animation:scrollX 30s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+@keyframes scrollX{to{transform:translateX(-50%)}}
+.mq-item{
+  font-family:'Fira Code',monospace;font-size:.92rem;color:var(--muted);
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+}
+.mq-item i{color:var(--c1);font-style:normal}
+
+/* ================= SECTIONS ================= */
+section{padding:100px 22px;position:relative}
+.container{max-width:1220px;margin:0 auto}
+.sec-head{text-align:center;max-width:720px;margin:0 auto 60px}
+.sec-tag{
+  display:inline-block;font-family:'Fira Code',monospace;font-size:.8rem;
+  color:var(--c1);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;
+}
+.sec-head h2{
+  font-size:clamp(1.7rem,3.8vw,2.6rem);font-weight:700;line-height:1.35;margin-bottom:16px;
+}
+.sec-head p{color:var(--muted);font-size:1.02rem}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(38px);transition:opacity .8s cubic-bezier(.2,.8,.3,1),transform .8s cubic-bezier(.2,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ================= ABOUT CARDS ================= */
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.info-card{
+  background:var(--card);border:1px solid var(--stroke);border-radius:var(--radius);
+  padding:30px 26px;position:relative;overflow:hidden;
+  transition:transform .4s cubic-bezier(.2,.8,.3,1),border-color .4s,background .4s;
+}
+.info-card::before{
+  content:'';position:absolute;inset:0;border-radius:var(--radius);
+  background:radial-gradient(400px circle at var(--mx,50%) var(--my,0%),rgba(124,92,255,.16),transparent 60%);
+  opacity:0;transition:opacity .4s;
+}
+.info-card:hover::before{opacity:1}
+.info-card:hover{transform:translateY(-8px);border-color:rgba(124,92,255,.45);background:var(--card2)}
+.ic-icon{
+  width:54px;height:54px;border-radius:14px;display:grid;place-items:center;
+  font-size:1.5rem;margin-bottom:18px;
+  background:linear-gradient(135deg,rgba(0,229,255,.16),rgba(124,92,255,.16));
+  border:1px solid rgba(124,92,255,.3);
+}
+.info-card h3{font-size:1.16rem;margin-bottom:10px;font-weight:600}
+.info-card p{color:var(--muted);font-size:.95rem}
+
+/* ================= ROADMAP ================= */
+.timeline{position:relative;max-width:960px;margin:0 auto}
+.timeline::before{
+  content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg,transparent,rgba(124,92,255,.7) 12%,rgba(0,229,255,.7) 88%,transparent);
+}
+.tl-item{
+  position:relative;width:50%;padding:0 48px 42px 0;
+}
+.tl-item:nth-child(even){margin-left:50%;padding:0 0 42px 48px}
+.tl-card{
+  background:var(--card);border:1px solid var(--stroke);border-radius:16px;
+  padding:22px 24px;transition:transform .35s,border-color .35s,box-shadow .35s;
+}
+.tl-card:hover{
+  transform:translateY(-6px);border-color:rgba(0,229,255,.45);
+  box-shadow:0 18px 40px rgba(0,0,0,.45);
+}
+.tl-num{
+  font-family:'Fira Code',monospace;font-size:.78rem;color:var(--c1);
+  letter-spacing:2px;display:block;margin-bottom:6px;
+}
+.tl-card h3{font-size:1.08rem;margin-bottom:8px;font-weight:600}
+.tl-card p{color:var(--muted);font-size:.92rem}
+.tl-dot{
+  position:absolute;top:22px;right:-9px;width:18px;height:18px;border-radius:50%;
+  background:var(--bg);border:3px solid var(--c2);z-index:2;
+  box-shadow:0 0 0 5px rgba(124,92,255,.13);
+  animation:dotPulse 2.4s ease-in-out infinite;
+}
+.tl-item:nth-child(even) .tl-dot{right:auto;left:-9px;border-color:var(--c1);box-shadow:0 0 0 5px rgba(0,229,255,.13)}
+@keyframes dotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+
+/* ================= LANGUAGES ================= */
+.lang-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.lang-card{
+  background:var(--card);border:1px solid var(--stroke);border-radius:16px;
+  padding:24px 20px;text-align:center;
+  transition:transform .35s cubic-bezier(.2,.8,.3,1),border-color .35s,background .35s;
+  position:relative;overflow:hidden;
+}
+.lang-card:hover{transform:translateY(-9px) scale(1.02);background:var(--card2);border-color:rgba(124,92,255,.5)}
+.lang-card .emoji{font-size:2.1rem;display:block;margin-bottom:12px;transition:transform .4s}
+.lang-card:hover .emoji{transform:scale(1.22) rotate(-7deg)}
+.lang-card h3{font-size:1.05rem;margin-bottom:6px;font-family:'Fira Code',monospace;font-weight:600}
+.lang-card p{font-size:.85rem;color:var(--muted)}
+.level{
+  display:inline-block;margin-top:12px;font-size:.72rem;padding:3px 11px;border-radius:50px;
+  background:rgba(0,229,255,.1);color:var(--c1);border:1px solid rgba(0,229,255,.25);
+  font-family:'Fira Code',monospace;
+}
+.level.mid{background:rgba(124,92,255,.1);color:#b9a6ff;border-color:rgba(124,92,255,.3)}
+.level.adv{background:rgba(255,77,141,.1);color:#ff9dbf;border-color:rgba(255,77,141,.3)}
+
+/* ================= A-Z ================= */
+.az-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.az-card{
+  background:var(--card);border:1px solid var(--stroke);border-radius:14px;
+  padding:16px 16px;display:flex;gap:14px;align-items:flex-start;
+  transition:all .35s cubic-bezier(.2,.8,.3,1);cursor:default;
+}
+.az-card:hover{
+  transform:translateY(-6px) rotate(-1deg);
+  background:linear-gradient(135deg,rgba(0,229,255,.09),rgba(124,92,255,.09));
+  border-color:rgba(0,229,255,.45);
+}
+.az-letter{
+  font-family:'Fira Code',monospace;font-size:1.3rem;font-weight:600;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;flex-shrink:0;width:26px;
+}
+.az-info b{display:block;font-size:.93rem;font-weight:600;line-height:1.4}
+.az-info span{font-size:.79rem;color:var(--muted);line-height:1.4;display:block}
+
+/* ================= BOOKS ================= */
+.books-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:26px}
+.book-card{
+  position:relative;border-radius:22px;padding:2px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(0,229,255,.5),rgba(124,92,255,.5),rgba(255,77,141,.5));
+  background-size:220% 220%;
+  animation:borderFlow 7s ease infinite;
+  transition:transform .4s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes borderFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.book-card:hover{transform:translateY(-10px)}
+.book-inner{
+  background:#080d1c;border-radius:20px;padding:34px 30px;height:100%;
+  display:flex;flex-direction:column;
+}
+.book-icon{
+  width:62px;height:62px;border-radius:16px;display:grid;place-items:center;
+  font-size:1.7rem;margin-bottom:20px;
+  background:linear-gradient(135deg,rgba(0,229,255,.18),rgba(255,77,141,.18));
+  border:1px solid rgba(124,92,255,.35);
+  animation:floatCard 5s ease-in-out infinite;
+}
+.book-card:nth-child(2) .book-icon{animation-delay:-2.5s}
+.book-inner h3{font-size:1.32rem;margin-bottom:12px;font-weight:700;line-height:1.4}
+.book-inner p{color:var(--muted);font-size:.95rem;margin-bottom:20px;flex-grow:1}
+.book-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.tag{
+  font-size:.74rem;padding:4px 12px;border-radius:50px;
+  background:rgba(255,255,255,.06);border:1px solid var(--stroke);color:var(--muted);
+  font-family:'Fira Code',monospace;
+}
+.btn-dl{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 24px;border-radius:50px;font-weight:600;font-size:.98rem;
+  background:var(--grad);color:#04060e;background-size:200% auto;
+  box-shadow:0 10px 28px rgba(124,92,255,.4);
+  transition:all .3s;width:100%;
+}
+.btn-dl:hover{background-position:right center;transform:translateY(-3px);box-shadow:0 16px 36px rgba(0,229,255,.5)}
+.note{
+  margin-top:34px;text-align:center;font-size:.88rem;color:var(--muted);
+  background:rgba(255,255,255,.03);border:1px dashed var(--stroke);
+  padding:14px 20px;border-radius:14px;
+}
+
+/* ================= FAQ ================= */
+.faq-wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.faq{
+  background:var(--card);border:1px solid var(--stroke);border-radius:16px;
+  overflow:hidden;transition:border-color .35s,background .35s;
+}
+.faq.open{border-color:rgba(124,92,255,.5);background:var(--card2)}
+.faq-q{
+  width:100%;background:none;border:none;color:var(--txt);
+  font-family:inherit;font-size:1.02rem;font-weight:600;text-align:left;
+  padding:20px 24px;cursor:pointer;display:flex;justify-content:space-between;
+  align-items:center;gap:16px;transition:color .25s;
+}
+.faq-q:hover{color:var(--c1)}
+.faq-q .icon{
+  flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  display:grid;place-items:center;font-size:1.15rem;font-weight:400;
+  background:rgba(124,92,255,.15);border:1px solid rgba(124,92,255,.3);
+  transition:transform .4s cubic-bezier(.2,.8,.3,1),background .3s;
+}
+.faq.open .faq-q .icon{transform:rotate(135deg);background:rgba(0,229,255,.2)}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height .45s cubic-bezier(.2,.8,.3,1),padding .35s;
+  padding:0 24px;
+}
+.faq.open .faq-a{max-height:420px;padding:0 24px 22px}
+.faq-a p{color:var(--muted);font-size:.95rem}
+
+/* ================= CTA ================= */
+.cta{
+  max-width:1000px;margin:0 auto;text-align:center;
+  border-radius:28px;padding:60px 34px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(0,229,255,.11),rgba(124,92,255,.13),rgba(255,77,141,.11));
+  border:1px solid rgba(124,92,255,.3);
+}
+.cta::before{
+  content:'';position:absolute;inset:-50%;
+  background:conic-gradient(from 0deg,transparent,rgba(0,229,255,.16),transparent 30%);
+  animation:spin 9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cta > *{position:relative;z-index:1}
+.cta h2{font-size:clamp(1.6rem,3.6vw,2.3rem);margin-bottom:16px;font-weight:700}
+.cta p{color:var(--muted);margin-bottom:30px;max-width:600px;margin-inline:auto}
+
+/* ================= FOOTER ================= */
+footer{
+  border-top:1px solid var(--stroke);padding:50px 22px 34px;
+  background:rgba(255,255,255,.015);text-align:center;
+}
+.foot-logo{font-size:1.3rem;font-weight:700;margin-bottom:12px}
+.foot-logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+footer p{color:var(--muted);font-size:.9rem}
+.foot-links{display:flex;justify-content:center;flex-wrap:wrap;gap:22px;margin:22px 0}
+.foot-links a{color:var(--muted);font-size:.9rem;transition:color .25s}
+.foot-links a:hover{color:var(--c1)}
+.copy{font-size:.82rem;color:#5b6a85;margin-top:14px}
+
+/* ================= TOP BTN ================= */
+#topBtn{
+  position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;
+  background:var(--grad);color:#04060e;border:none;cursor:pointer;
+  font-size:1.2rem;display:grid;place-items:center;z-index:800;
+  opacity:0;pointer-events:none;transform:translateY(20px);
+  transition:all .4s cubic-bezier(.2,.8,.3,1);
+  box-shadow:0 10px 28px rgba(124,92,255,.5);
+}
+#topBtn.show{opacity:1;pointer-events:auto;transform:none}
+#topBtn:hover{transform:translateY(-4px) scale(1.08)}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:980px){
+  .hero-inner{grid-template-columns:1fr;gap:44px}
+  .code-window{animation:none}
+  .hero{padding-top:110px;min-height:auto}
+}
+@media (max-width:820px){
+  .menu-btn{display:grid;place-items:center}
+  .links{
+    position:fixed;top:70px;left:14px;right:14px;
+    flex-direction:column;align-items:stretch;gap:6px;
+    background:rgba(8,12,24,.97);backdrop-filter:blur(20px);
+    border:1px solid var(--stroke);border-radius:18px;padding:16px;
+    opacity:0;visibility:hidden;transform:translateY(-14px);
+    transition:all .35s cubic-bezier(.2,.8,.3,1);
+    box-shadow:0 24px 60px rgba(0,0,0,.6);
+  }
+  .links.open{opacity:1;visibility:visible;transform:none}
+  .links a{padding:11px 14px;border-radius:10px}
+  .links a:hover{background:rgba(255,255,255,.05)}
+  .links a:not(.btn-sm)::after{display:none}
+  .btn-sm{text-align:center;margin-top:6px}
+  .timeline::before{left:9px}
+  .tl-item,.tl-item:nth-child(even){width:100%;margin-left:0;padding:0 0 30px 40px}
+  .tl-dot,.tl-item:nth-child(even) .tl-dot{left:0;right:auto}
+  section{padding:76px 18px}
+  .az-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+@media (max-width:480px){
+  .hero-mini{gap:20px}
+  .mini-item b{font-size:1.25rem}
+  .cw-body{font-size:.78rem;padding:16px;min-height:250px}
+  .book-inner{padding:26px 22px}
+  .cta{padding:44px 22px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<div class="bg-layer">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+<div class="grid-bg"></div>
+<div id="particles"></div>
+<div class="progress" id="progress"></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#home">
+      <span class="logo-mark">&lt;/&gt;</span>
+      <span>কোডপথ <b>বাংলা</b></span>
+    </a>
+    <nav class="links" id="links">
+      <a href="#about">প্রোগ্রামিং কী</a>
+      <a href="#roadmap">রোডম্যাপ</a>
+      <a href="#langs">ভাষা</a>
+      <a href="#az">A–Z</a>
+      <a href="#books">ফ্রি PDF</a>
+      <a href="#faq">প্রশ্ন</a>
+      <a class="btn-sm" href="#books">শেখা শুরু করো</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="মেনু">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="badge reveal"><span class="dot-live"></span> ১০০% ফ্রি • বাংলায় শেখা</div>
+      <h1 class="reveal">
+        প্রোগ্রামিং শিখুন<br>
+        <span class="typed-wrap"><span id="typed"></span></span>
+        <span class="grad-text">শূন্য থেকে হিরো</span> পর্যন্ত
+      </h1>
+      <p class="lead reveal">
+        অ্যালগরিদম থেকে অ্যাপ ডেভেলপমেন্ট — প্রোগ্রামিংয়ের A to Z ধারণা, ধাপে ধাপে রোডম্যাপ
+        আর ২টি ফ্রি বাংলা PDF বই নিয়ে আপনার সম্পূর্ণ শেখার ঠিকানা।
+      </p>
+      <div class="hero-btns reveal">
+        <a href="#books" class="btn btn-primary">📚 ফ্রি PDF ডাউনলোড</a>
+        <a href="#roadmap" class="btn btn-ghost">🚀 রোডম্যাপ দেখুন</a>
+      </div>
+      <div class="hero-mini reveal">
+        <div class="mini-item"><b data-count="2">0</b><span>ফ্রি বাংলা PDF</span></div>
+        <div class="mini-item"><b data-count="26">0</b><span>A–Z টপিক</span></div>
+        <div class="mini-item"><b data-count="10">0</b><span>শেখার ধাপ</span></div>
+      </div>
+    </div>
+
+    <div class="code-window reveal">
+      <div class="cw-top">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="cw-title">first_program.py</span>
+      </div>
+      <pre class="cw-body"><code id="codeType"></code><span class="caret" id="codeCaret"></span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track" id="marquee">
+    <div class="mq-item"><i>◆</i> Python</div>
+    <div class="mq-item"><i>◆</i> JavaScript</div>
+    <div class="mq-item"><i>◆</i> অ্যালগরিদম</div>
+    <div class="mq-item"><i>◆</i> HTML &amp; CSS</div>
+    <div class="mq-item"><i>◆</i> ডেটা স্ট্রাকচার</div>
+    <div class="mq-item"><i>◆</i> Git &amp; GitHub</div>
+    <div class="mq-item"><i>◆</i> ডেটাবেস</div>
+    <div class="mq-item"><i>◆</i> React</div>
+    <div class="mq-item"><i>◆</i> লজিক বিল্ডিং</div>
+    <div class="mq-item"><i>◆</i> ফ্রিল্যান্সিং</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// শুরু থেকে বুঝুন</span>
+      <h2>প্রোগ্রামিং আসলে কী?</h2>
+      <p>কম্পিউটারকে দিয়ে কাজ করানোর জন্য যে ভাষায় নির্দেশ লিখতে হয়, সেটাই প্রোগ্রামিং। ভয়ের কিছু নেই — এটা আসলে সমস্যা সমাধানের দক্ষতা।</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="info-card reveal tilt">
+        <div class="ic-icon">🧠</div>
+        <h3>প্রোগ্রামিং মানে চিন্তা করা</h3>
+        <p>প্রোগ্রামিং শুধু কোড লেখা না — এটা একটা সমস্যাকে ছোট ছোট ধাপে ভেঙে সমাধান করার কলা। এই চিন্তা শেখা হয়ে গেলে ভাষা শেখা সহজ।</p>
+      </div>
+      <div class="info-card reveal tilt">
+        <div class="ic-icon">🗣️</div>
+        <h3>ভাষা শুধু মाध्यम</h3>
+        <p>Python, C, JavaScript — এগুলো নিছক হাতিয়ার। একবার একটার লজিক বুঝলে অন্যগুলো ২ সপ্তাহেই শেখা যায়।</p>
+      </div>
+      <div class="info-card reveal tilt">
+        <div class="ic-icon">🎯</div>
+        <h3>কেন শিখবেন?</h3>
+        <p>ফ্রিল্যান্সিং, জব মার্কেট, নিজের অ্যাপ বানানো, বিদেশে পড়াশোনা — প্রোগ্রামিং আজ সবচেয়ে চাহিদাসম্পন্ন স্কিলগুলোর একটি।</p>
+      </div>
+      <div class="info-card reveal tilt">
+        <div class="ic-icon">📈</div>
+        <h3>কোথা থেকে শুরু?</h3>
+        <p>সবচেয়ে বড় ভুল হচ্ছে "কোন ভাষা" দিয়ে শুরু করা। আসল শুরু হয় **লজিক ও অ্যালগরিদম** থেকে। নিচের রোডম্যাপ সেটাই দেখাবে।</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// ধাপে ধাপে রোডম্যাপ</span>
+      <h2>শূন্য থেকে প্রোগ্রামার হওয়ার ১০ ধাপ</h2>
+      <p>এই ক্রম অনুসরণ করলে আপনি কখনো হারিয়ে যাবেন না। প্রতিটি ধাপে হাতে-কলমে প্র্যাকটিস করুন।</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 01</span>
+          <h3>কম্পিউটার বেসিক ও টাইপিং</h3>
+          <p>ফাইল, ফোল্ডার, OS, ইন্টারনেট, কীবোর্ড শর্টকাট আর টাচ টাইপিং — এই ভিত্তিটা মজবুত করুন।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 02</span>
+          <h3>লজিক ও অ্যালগরিদম</h3>
+          <p>ফ্লোচার্ট, সিউডোকোড, ধারাবাহিক চিন্তা — কোড লেখার আগে সমস্যা সমাধানের চর্চা।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 03</span>
+          <h3>প্রথম ভাষা: C বা Python</h3>
+          <p>C শেখায় মেমোরি ও ফাউন্ডেশন; Python শেখায় দ্রুত রেজাল্ট। যেটা দিয়ে শুরু করবেন, সেটাতেই ২-৩ মাস থাকুন।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 04</span>
+          <h3>HTML, CSS ও JavaScript</h3>
+          <p>নিজের চোখের সামনে কিছু তৈরি হওয়া দেখতে চাইলে ওয়েব ডেভেলপমেন্ট সেরা শুরু।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 05</span>
+          <h3>Git ও GitHub</h3>
+          <p>কোডের ভার্সন কন্ট্রোল শিখুন। আপনার GitHub প্রোফাইলই হবে ডিজিটাল রেজুমে।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 06</span>
+          <h3>ডেটা স্ট্রাকচার ও অ্যালগরিদম</h3>
+          <p>অ্যারে, লিংকড লিস্ট, স্ট্যাক, কিউ, ট্রি, গ্রাফ, সার্চিং ও সর্টিং — ইন্টারভিউয়ের মূল ভিত্তি।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 07</span>
+          <h3>ডেটাবেস ও SQL</h3>
+          <p>ডেটা কোথায় রাখবেন আর কীভাবে বের করবেন — MySQL / PostgreSQL / MongoDB শিখুন।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 08</span>
+          <h3>ফ্রেমওয়ার্ক ও টুল</h3>
+          <p>React, Node.js, Django, Laravel — যেকোনো একটা ফ্রেমওয়ার্ক গভীরভাবে শিখুন।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 09</span>
+          <h3>নিজের প্রজেক্ট বানান</h3>
+          <p>টিউটোরিয়াল দেখে কপি নয় — নিজের আইডিয়া থেকে ৫টি প্রজেক্ট বানান। এটাই আপনাকে আলাদা করবে।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-card">
+          <span class="tl-num">STEP 10</span>
+          <h3>ফ্রিল্যান্সিং, জব বা কনটেস্ট</h3>
+          <p>পোর্টফোলিও সাজান, CV তৈরি করুন, মার্কেটপ্লেসে বিড করুন বা Competitive Programming করুন।</p>
+        </div>
+        <span class="tl-dot"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LANGUAGES -->
+<section id="langs">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// জনপ্রিয় ভাষাগুলো</span>
+      <h2>কোন ভাষা দিয়ে কী করবেন?</h2>
+      <p>প্রতিটি ভাষার নিজস্ব জায়গা আছে। আপনার লক্ষ্য অনুযায়ী বেছে নিন।</p>
+    </div>
+
+    <div class="lang-grid">
+      <div class="lang-card reveal"><span class="emoji">🐍</span><h3>Python</h3><p>AI, ডেটা সায়েন্স, স্ক্রিপ্টিং, বেসিক শেখার জন্য সেরা</p><span class="level">শুরু করার জন্য</span></div>
+      <div class="lang-card reveal"><span class="emoji">⚡</span><h3>JavaScript</h3><p>ওয়েবসাইটের প্রাণ — ফ্রন্টএন্ড ও ব্যাকএন্ড দুটোই</p><span class="level">শুরু করার জন্য</span></div>
+      <div class="lang-card reveal"><span class="emoji">🔧</span><h3>C</h3><p>প্রোগ্রামিংয়ের ভিত্তি, মেমোরি ও পয়েন্টার বোঝার সেরা জায়গা</p><span class="level mid">ফাউন্ডেশন</span></div>
+      <div class="lang-card reveal"><span class="emoji">🚀</span><h3>C++</h3><p>কম্পিটিটিভ প্রোগ্রামিং ও গেম ডেভেলপমেন্ট</p><span class="level mid">ফাউন্ডেশন</span></div>
+      <div class="lang-card reveal"><span class="emoji">☕</span><h3>Java</h3><p>অ্যান্ড্রয়েড অ্যাপ ও এন্টারপ্রাইজ সফটওয়্যার</p><span class="level mid">ইন্টারমিডিয়েট</span></div>
+      <div class="lang-card reveal"><span class="emoji">🎨</span><h3>HTML + CSS</h3><p>ওয়েব পেজের কাঠামো ও ডিজাইন — প্রথম দিনেই কিছু বানানো যায়</p><span class="level">শুরু করার জন্য</span></div>
+      <div class="lang-card reveal"><span class="emoji">🐘</span><h3>PHP</h3><p>ওয়ার্ডপ্রেস ও পুরনো ওয়েব সিস্টেমের জন্য এখনো জনপ্রিয়</p><span class="level mid">ইন্টারমিডিয়েট</span></div>
+      <div class="lang-card reveal"><span class="emoji">📱</span><h3>Kotlin</h3><p>আধুনিক অ্যান্ড্রয়েড অ্যাপ ডেভেলপমেন্ট</p><span class="level adv">অ্যাডভান্সড</span></div>
+      <div class="lang-card reveal"><span class="emoji">🐹</span><h3>Go</h3><p>দ্রুতগতির সার্ভার ও ক্লাউড সিস্টেম</p><span class="level adv">অ্যাডভান্সড</span></div>
+      <div class="lang-card reveal"><span class="emoji">🗄️</span><h3>SQL</h3><p>ডেটাবেস থেকে তথ্য খোঁজা ও সংরক্ষণ করা</p><span class="level mid">ইন্টারমিডিয়েট</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- A-Z -->
+<section id="az">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// A থেকে Z</span>
+      <h2>প্রোগ্রামিংয়ের ২৬টি জরুরি টার্ম</h2>
+      <p>এই শব্দগুলো জানা থাকলে ডকুমেন্টেশন, ভিডিও বা টিউটোরিয়াল পড়তে আর আটকাবেন না।</p>
+    </div>
+    <div class="az-grid" id="azGrid"></div>
+  </div>
+</section>
+
+<!-- BOOKS -->
+<section id="books">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// ফ্রি বাংলা বই</span>
+      <h2>২টি ফ্রি বাংলা PDF বই 📥</h2>
+      <p>শুরু থেকে শেখার জন্য একদম গোছানো বাংলা গাইড। Google Drive থেকে সরাসরি পড়ুন বা ডাউনলোড করুন।</p>
+    </div>
+
+    <div class="books-grid">
+      <!-- BOOK 1 -->
+      <div class="book-card reveal">
+        <div class="book-inner">
+          <div class="book-icon">📘</div>
+          <h3>প্রোগ্রামিং এর শুরু</h3>
+          <p>যারা একদম প্রথমবার প্রোগ্রামিং শিখতে চান, তাদের জন্য শুরু থেকে লেখা সহজ বাংলা গাইড। বেসিক ধারণা, লজিক ও প্রথম কোড — সব একসাথে।</p>
+          <div class="book-tags">
+            <span class="tag">বিগিনার</span>
+            <span class="tag">বাংলা</span>
+            <span class="tag">ফ্রি PDF</span>
+          </div>
+          <a class="btn-dl" target="_blank" rel="noopener noreferrer"
+             href="https://drive.google.com/file/d/1pj4mILNDfWXbpPB-27e4wNwpJQyF_Zka/view?usp=drive_link">
+            ⬇️ PDF দেখুন / ডাউনলোড
+          </a>
+        </div>
+      </div>
+
+      <!-- BOOK 2 -->
+      <div class="book-card reveal">
+        <div class="book-inner">
+          <div class="book-icon">📗</div>
+          <h3>প্রোগ্রামিং এর চৌদ্দগুস্তি</h3>
+          <p>প্রোগ্রামিংয়ের ১৪টি অত্যন্ত গুরুত্বপূর্ণ বিষয় নিয়ে বিস্তারিত বাংলা ব্যাখ্যা। একটু এগিয়ে যাওয়ার জন্য দারুণ একটা রেফারেন্স বই।</p>
+          <div class="book-tags">
+            <span class="tag">কনসেপ্ট</span>
+            <span class="tag">বাংলা</span>
+            <span class="tag">ফ্রি PDF</span>
+          </div>
+          <a class="btn-dl" target="_blank" rel="noopener noreferrer"
+             href="https://drive.google.com/file/d/1Ok5fMIs_a0qkkeDXXCxOPEJdxeQJeEBP/view?usp=drive_link">
+            ⬇️ PDF দেখুন / ডাউনলোড
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p class="note reveal">
+      💡 <b>টিপস:</b> Google Drive লিংকে ঢুকে উপরের ডান দিকের <b>⬇ Download</b> বাটনে ক্লিক করলেই PDF আপনার ডিভাইসে সেভ হবে।
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">// সচরাচর প্রশ্ন</span>
+      <h2>আপনার মনে যে প্রশ্নগুলো আছে</h2>
+    </div>
+
+    <div class="faq-wrap">
+      <div class="faq reveal">
+        <button class="faq-q">প্রোগ্রামিং শিখতে কি ভালো গণিত জানা লাগবে? <span class="icon">+</span></button>
+        <div class="faq-a"><p>না। সাধারণ যোগ-বিয়োগ, গুণ-ভাগ আর একটু লজিক জানলেই শুরু করা যায়। ওয়েব ডেভেলপমেন্ট বা অ্যাপ বানানোর জন্য উচ্চতর গণিত লাগে না। তবে Machine Learning বা Competitive Programming-এ গেলে গণিত দরকার হবে — সেটা পরে শিখলেও চলে।</p></div>
+      </div>
+
+      <div class="faq reveal">
+        <button class="faq-q">একদম শূন্য থেকে কোন ভাষা দিয়ে শুরু করব? <span class="icon">+</span></button>
+        <div class="faq-a"><p>যদি দ্রুত কিছু বানিয়ে আনন্দ পেতে চান → <b>HTML, CSS, JavaScript</b>। যদি ফাউন্ডেশন মজবুত করতে চান → <b>C</b>। যদি AI/ডেটা নিয়ে কাজ করতে চান → <b>Python</b>। যেটাই নেন, অন্তত ২-৩ মাস একটাতেই থাকুন।</p></div>
+      </div>
+
+      <div class="faq reveal">
+        <button class="faq-q">ইংরেজি ভালো না জানলে কি শেখা যাবে? <span class="icon">+</span></button>
+        <div class="faq-a"><p>অবশ্যই যাবে। কোডিং কীওয়ার্ডগুলো ইংরেজি হলেও সেগুলো মাত্র ৩০-৪০টা শব্দ। বাংলা টিউটোরিয়াল ও এই দুইটা বাংলা PDF দিয়ে শুরু করুন, ধীরে ধীরে ইংরেজি ডকুমেন্টেশন পড়ার অভ্যাস তৈরি হবে।</p></div>
+      </div>
+
+      <div class="faq reveal">
+        <button class="faq-q">কত সময় লাগবে প্রোগ্রামার হওয়ার জন্য? <span class="icon">+</span></button>
+        <div class="faq-a"><p>দিনে ২-৩ ঘণ্টা নিয়মিত প্র্যাকটিস করলে <b>৬-৮ মাসে</b> আপনি জুনিয়র লেভেলে কাজ শুরু করতে পারবেন। তবে বিষয়টা প্রতিভার চেয়ে <b>ধারাবাহিকতার</b> উপর নির্ভর করে — একদিনে ১০ ঘণ্টার চেয়ে প্রতিদিন ২ ঘণ্টা অনেক ভালো।</p></div>
+      </div>
+
+      <div class="faq reveal">
+        <button class="faq-q">আমার ল্যাপটপ নেই, মোবাইল দিয়েই কি শেখা যাবে? <span class="icon">+</span></button>
+        <div class="faq-a"><p>হ্যাঁ, শুরু করা যায়। মোবাইলে <b>Replit</b>, <b>Programiz</b>, <b>Sololearn</b> বা <b>Termux</b> অ্যাপ দিয়ে কোড লেখা প্র্যাকটিস করতে পারবেন। তবে একটু এগিয়ে গেলে একটা সেকেন্ড-হ্যান্ড ল্যাপটপ থাকলে অনেক সুবিধা হবে।</p></div>
+      </div>
+
+      <div class="faq reveal">
+        <button class="faq-q">এই দুইটা PDF কি সম্পূর্ণ ফ্রি? <span class="icon">+</span></button>
+        <div class="faq-a"><p>হ্যাঁ, দুইটাই সম্পূর্ণ ফ্রি। উপরের <b>ফ্রি PDF</b> সেকশনে দেওয়া বাটনে ক্লিক করলে সরাসরি Google Drive-এ চলে যাবেন, সেখান থেকে পড়তে পারবেন বা ডাউনলোড করে নিতে পারবেন।</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding-top:20px">
+  <div class="cta reveal">
+    <h2>আজই শুরু হোক আপনার কোডিং যাত্রা 🚀</h2>
+    <p>আর কালকের জন্য অপেক্ষা না করে আজই প্রথম লাইন কোড লিখুন। বিনামূল্যের বাংলা PDF দুটি ডাউনলোড করে ফেলুন এখনই।</p>
+    <div class="hero-btns" style="justify-content:center;margin-bottom:0">
+      <a href="#books" class="btn btn-primary">📚 ফ্রি PDF নিন</a>
+      <a href="#roadmap" class="btn btn-ghost">🗺️ রোডম্যাপ দেখুন</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">কোডপথ <span>বাংলা</span></div>
+  <p>বাংলা ভাষায় প্রোগ্রামিং শেখার সহজ ঠিকানা — শূন্য থেকে শুরু, স্বপ্ন পর্যন্ত।</p>
+  <div class="foot-links">
+    <a href="#about">প্রোগ্রামিং কী</a>
+    <a href="#roadmap">রোডম্যাপ</a>
+    <a href="#langs">ভাষা</a>
+    <a href="#az">A–Z</a>
+    <a href="#books">ফ্রি PDF</a>
+    <a href="#faq">প্রশ্ন</a>
+  </div>
+  <p class="copy">© <span id="year"></span> কোডপথ বাংলা — শিক্ষার্থীদের জন্য ভালোবাসা দিয়ে তৈরি। ❤️</p>
+</footer>
+
+<button id="topBtn" aria-label="উপরে যান">↑</button>
+
+<script>
+/* ================= YEAR ================= */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ================= NAV SCROLL ================= */
+const nav = document.getElementById('nav');
+const progress = document.getElementById('progress');
+const topBtn = document.getElementById('topBtn');
+
+function onScroll(){
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  topBtn.classList.toggle('show', y > 600);
+
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+/* ================= MOBILE MENU ================= */
+const menuBtn = document.getElementById('menuBtn');
+const links = document.getElementById('links');
+menuBtn.addEventListener('click', () => {
+  links.classList.toggle('open');
+  menuBtn.textContent = links.classList.contains('open') ? '✕' : '☰';
+});
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  links.classList.remove('open');
+  menuBtn.textContent = '☰';
+}));
+
+/* ================= TYPING (HERO) ================= */
+const words = ['একদম সহজে', 'বাংলায়', 'শূন্য থেকে', 'নিজের গতিতে', 'হাতে-কলমে'];
+const typedEl = document.getElementById('typed');
+let wi = 0, ci = 0, deleting = false;
+
+function typeLoop(){
+  const word = words[wi];
+  if(!deleting){
+    typedEl.textContent = word.slice(0, ++ci);
+    if(ci === word.length){
+      deleting = true;
+      return setTimeout(typeLoop, 1600);
+    }
+    setTimeout(typeLoop, 95);
+  } else {
+    typedEl.textContent = word.slice(0, --ci);
+    if(ci === 0){
+      deleting = false;
+      wi = (wi + 1) % words.length;
+      return setTimeout(typeLoop, 320);
+    }
+    setTimeout(typeLoop, 45);
+  }
+}
+setTimeout(typeLoop, 700);
+
+/* ================= CODE WINDOW TYPING ================= */
+const codeLines = [
+  {t:'<span class="cm"># আমার প্রথম প্রোগ্রাম 🚀</span>', d:0},
+  {t:'<span class="kw">name</span> = <span class="st">"শিক্ষার্থী"</span>', d:0},
+  {t:'', d:0},
+  {t:'<span class="kw">def</span> <span class="fn">welcome</span>(name):', d:0},
+  {t:'    <span class="fn">print</span>(<span class="st">"হ্যালো,"</span>, name)', d:0},
+  {t:'    <span class="fn">print</span>(<span class="st">"চলো প্রোগ্রামিং শিখি!"</span>)', d:0},
+  {t:'', d:0},
+  {t:'<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">3</span>):', d:0},
+  {t:'    <span class="fn">welcome</span>(name)', d:0},
+  {t:'', d:0},
+  {t:'<span class="cm"># আউটপুট:</span>', d:0},
+  {t:'<span class="cm"># হ্যালো, শিক্ষার্থী</span>', d:0},
+  {t:'<span class="cm"># চলো প্রোগ্রামিং শিখি!</span>', d:0}
+];
+const codeType = document.getElementById('codeType');
+const codeCaret = document.getElementById('codeCaret');
+let lineIdx = 0, charIdx = 0, built = '';
+const plain = codeLines.map(l => l.t.replace(/<[^>]+>/g, ''));
+
+function typeCode(){
+  if(lineIdx >= codeLines.length){
+    setTimeout(() => {
+      built = ''; codeType.innerHTML = ''; lineIdx = 0; charIdx = 0;
+      typeCode();
+    }, 4200);
+    return;
+  }
+  const raw = plain[lineIdx];
+  if(charIdx <= raw.length){
+    const shown = raw.slice(0, charIdx);
+    const prev = built ? built + '\n' : '';
+    // rebuild with simple escaping — keep it readable
+    codeType.innerHTML = escapeHtml(prev + shown);
+    charIdx++;
+    setTimeout(typeCode, raw.length === 0 ? 40 : 26);
+  } else {
+    built += (built ? '\n' : '') + raw;
+    lineIdx++; charIdx = 0;
+    setTimeout(typeCode, 130);
+  }
+}
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+setTimeout(typeCode, 1200);
+
+/* ================= REVEAL ON SCROLL ================= */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting){
+      e.target.style.transitionDelay = (e.target.dataset.delay || 0) + 'ms';
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
+
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  const parent = el.parentElement;
+  const siblings = parent ? Array.from(parent.querySelectorAll(':scope > .reveal')) : [];
+  const idx = siblings.indexOf(el);
+  if(idx > 0 && idx < 8) el.dataset.delay = idx * 90;
+  io.observe(el);
+});
+
+/* ================= COUNTER ================= */
+const counters = document.querySelectorAll('[data-count]');
+const cIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    const el = e.target;
+    const target = +el.dataset.count;
+    let cur = 0;
+    const step = Math.max(1, Math.ceil(target / 32));
+    const tick = () => {
+      cur += step;
+      if(cur >= target){ el.textContent = target + '+'; return; }
+      el.textContent = cur;
+      requestAnimationFrame(tick);
+    };
+    tick();
+    cIO.unobserve(el);
+  });
+}, {threshold:0.6});
+counters.forEach(c => cIO.observe(c));
+
+/* ================= A-Z GRID ================= */
+const azData = [
+  ['A','Algorithm','অ্যালগরিদম — সমস্যার ধাপে ধাপে সমাধান'],
+  ['B','Bug','বাগ — কোডের ভুল যার কারণে কাজ করে না'],
+  ['C','Code','কোড — কম্পিউটারকে দেওয়া নির্দেশনা'],
+  ['D','Database','ডেটাবেস — তথ্য সংরক্ষণের জায়গা'],
+  ['E','Error','এরর — প্রোগ্রাম চালানোর সময়ের সমস্যা'],
+  ['F','Function','ফাংশন — বারবার ব্যবহারযোগ্য কোড ব্লক'],
+  ['G','Git','গিট — কোডের ভার্সন কন্ট্রোল সিস্টেম'],
+  ['H','HTML','ওয়েবপেজের কাঠামো তৈরির ভাষা'],
+  ['I','IDE','কোড লেখার সফটওয়্যার (VS Code)'],
+  ['J','JavaScript','ওয়েবের ইন্টারঅ্যাকটিভ ভাষা'],
+  ['K','Kotlin','অ্যান্ড্রয়েড অ্যাপের আধুনিক ভাষা'],
+  ['L','Loop','লুপ — একই কাজ বারবার করানো'],
+  ['M','Machine Learning','মেশিন লার্নিং — ডেটা থেকে শেখা AI'],
+  ['N','Node.js','সার্ভার সাইড JavaScript রানটাইম'],
+  ['O','Object','অবজেক্ট — ডেটা ও ফাংশনের সমন্বয়'],
+  ['P','Python','সহজ ও শক্তিশালী প্রোগ্রামিং ভাষা'],
+  ['Q','Query','কোয়েরি — ডেটাবেসে প্রশ্ন করার 명령'],
+  ['R','React','ইউজার ইন্টারফেস বানানোর লাইব্রেরি'],
+  ['S','Syntax','সিনট্যাক্স — ভাষার লেখার নিয়ম'],
+  ['T','TypeScript','JavaScript-এর টাইপ-সেফ ভার্সন'],
+  ['U','UI / UX','ইন্টারফেস ও ইউজার এক্সপেরিয়েন্স'],
+  ['V','Variable','ভেরিয়েবল — ডেটা রাখার বাক্স'],
+  ['W','Web Dev','ওয়েবসাইট তৈরির পুরো প্রক্রিয়া'],
+  ['X','XML','ডেটা আদান-প্রদানের মার্কআপ ভাষা'],
+  ['Y','YAML','কনফিগারেশন ফাইলের সহজ ফরম্যাট'],
+  ['Z','Zero to Hero','শূন্য থেকে দক্ষ প্রোগ্রামার হওয়া']
+];
+const azGrid = document.getElementById('azGrid');
+azData.forEach(([letter, title, desc], i) => {
+  const div = document.createElement('div');
+  div.className = 'az-card reveal';
+  div.dataset.delay = (i % 6) * 60;
+  div.innerHTML = `<span class="az-letter">${letter}</span>
+    <span class="az-info"><b>${title}</b><span>${desc}</span></span>`;
+  azGrid.appendChild(div);
+  io.observe(div);
+});
+
+/* fix typo-safe: replace accidental mixed char */
+azGrid.querySelectorAll('.az-info span').forEach(s => {
+  s.textContent = s.textContent.replace('명', '');
+});
+
+/* ================= MARQUEE DUPLICATE ================= */
+const mq = document.getElementById('marquee');
+mq.innerHTML += mq.innerHTML;
+
+/* ================= FAQ ================= */
+document.querySelectorAll('.faq').forEach(faq => {
+  const q = faq.querySelector('.faq-q');
+  q.addEventListener('click', () => {
+    const isOpen = faq.classList.contains('open');
+    document.querySelectorAll('.faq.open').forEach(f => f.classList.remove('open'));
+    if(!isOpen) faq.classList.add('open');
+  });
+});
+
+/* ================= PARTICLES ================= */
+const pWrap = document.getElementById('particles');
+const symbols = ['{ }','</>','( )','[ ]','=>','#','&&','||','++','01','if','for',';','*','$','~'];
+for(let i = 0; i < 26; i++){
+  const p = document.createElement('span');
+  p.className = 'pt';
+  p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  p.style.left = Math.random() * 100 + '%';
+  p.style.bottom = '-60px';
+  p.style.fontSize = (11 + Math.random() * 12) + 'px';
+  p.style.animationDuration = (14 + Math.random() * 16) + 's';
+  p.style.animationDelay = (-Math.random() * 22) + 's';
+  p.style.opacity = 0.25 + Math.random() * 0.4;
+  if(Math.random() > 0.65) p.style.color = 'rgba(0,229,255,.45)';
+  if(Math.random() > 0.85) p.style.color = 'rgba(255,77,141,.4)';
+  pWrap.appendChild(p);
+}
+
+/* ================= CARD SPOTLIGHT ================= */
+document.querySelectorAll('.info-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
+});
+
+/* ================= SMOOTH ANCHOR (fallback) ================= */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if(id.length < 2) return;
+    const el = document.querySelector(id);
+    if(el){
+      e.preventDefault();
+      const top = el.getBoundingClientRect().top + window.scrollY - 78;
+      window.scrollTo({top, behavior:'smooth'});
+    }
+  });
+});
+</script>
+</body>
+</html>
