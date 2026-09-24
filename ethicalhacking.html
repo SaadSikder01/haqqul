@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H4CK3R L4B :: Practice Terminal</title>
+<style>
+:root{
+  --green:#00ff41;
+  --green-dim:#00aa2b;
+  --cyan:#00e5ff;
+  --red:#ff003c;
+  --yellow:#ffe600;
+  --panel:rgba(0,18,4,0.78);
+  --border:rgba(0,255,65,0.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:#000;
+  color:var(--green);
+  font-family:'Courier New',Consolas,monospace;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* ===== BACKGROUND LAYERS ===== */
+#matrix{position:fixed;inset:0;z-index:0;opacity:.35}
+.scanlines{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,
+    rgba(0,0,0,.18) 0px, rgba(0,0,0,.18) 1px,
+    transparent 1px, transparent 3px);
+}
+.vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.9) 100%);
+}
+/* ===== LAYOUT ===== */
+.wrap{position:relative;z-index:2;max-width:1350px;margin:0 auto;padding:18px}
+header{text-align:center;padding:18px 0 6px}
+.glitch{
+  position:relative;display:inline-block;
+  font-size:clamp(1.5rem,5.5vw,3.1rem);
+  font-weight:bold;letter-spacing:4px;
+  color:var(--green);
+  text-shadow:0 0 8px var(--green),0 0 22px rgba(0,255,65,.6);
+}
+.glitch::before,.glitch::after{
+  content:attr(data-text);position:absolute;left:0;top:0;width:100%;
+}
+.glitch::before{color:var(--cyan);animation:g1 2.6s infinite steps(2)}
+.glitch::after{color:var(--red);animation:g2 3.1s infinite steps(2)}
+@keyframes g1{
+  0%,88%,100%{transform:translate(0);clip-path:inset(0 0 100% 0)}
+  90%{transform:translate(-3px,2px);clip-path:inset(0 0 55% 0)}
+  94%{transform:translate(3px,-2px);clip-path:inset(35% 0 30% 0)}
+}
+@keyframes g2{
+  0%,86%,100%{transform:translate(0);clip-path:inset(100% 0 0 0)}
+  88%{transform:translate(3px,-2px);clip-path:inset(60% 0 0 0)}
+  92%{transform:translate(-3px,2px);clip-path:inset(20% 0 45% 0)}
+}
+.subtitle{
+  margin-top:8px;font-size:.8rem;letter-spacing:3px;
+  color:var(--green-dim);
+}
+.blink{animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ===== STATS ===== */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  margin:18px 0;
+}
+.stat{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:6px;padding:12px 8px;text-align:center;
+  backdrop-filter:blur(4px);
+  box-shadow:0 0 12px rgba(0,255,65,.12) inset;
+}
+.stat .lbl{font-size:.62rem;letter-spacing:2px;color:var(--green-dim)}
+.stat .val{
+  font-size:1.25rem;font-weight:bold;margin-top:4px;
+  text-shadow:0 0 10px currentColor;
+}
+#rankVal{color:var(--yellow)}
+#scoreVal{color:var(--cyan)}
+#solvedVal{color:var(--green)}
+#barWrap{
+  grid-column:1/-1;height:8px;border:1px solid var(--border);
+  border-radius:4px;overflow:hidden;background:rgba(0,0,0,.6);
+}
+#bar{height:100%;width:0%;transition:width .6s ease;
+  background:linear-gradient(90deg,var(--green),var(--cyan));
+  box-shadow:0 0 12px var(--green)}
+
+/* ===== MAIN GRID ===== */
+.main{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;align-items:start}
+@media(max-width:960px){.main{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:8px;backdrop-filter:blur(5px);
+  box-shadow:0 0 24px rgba(0,255,65,.1);
+  overflow:hidden;
+}
+.panel-head{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 12px;border-bottom:1px solid var(--border);
+  background:rgba(0,255,65,.06);font-size:.78rem;letter-spacing:2px;
+}
+.dot{width:10px;height:10px;border-radius:50%}
+.d1{background:var(--red)}.d2{background:var(--yellow)}.d3{background:var(--green)}
+
+/* ===== CHALLENGE CARDS ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:12px;max-height:600px;overflow-y:auto}
+.cards::-webkit-scrollbar{width:7px}
+.cards::-webkit-scrollbar-thumb{background:var(--green-dim);border-radius:4px}
+.cards::-webkit-scrollbar-track{background:rgba(0,0,0,.4)}
+
+.card{
+  position:relative;border:1px solid var(--border);border-radius:6px;
+  padding:12px;cursor:pointer;background:rgba(0,25,5,.55);
+  transition:.25s;overflow:hidden;
+}
+.card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 40%,rgba(0,255,65,.18) 50%,transparent 60%);
+  transform:translateX(-120%);transition:.5s;
+}
+.card:hover::after{transform:translateX(120%)}
+.card:hover{
+  transform:translateY(-3px);
+  border-color:var(--green);
+  box-shadow:0 0 18px rgba(0,255,65,.4);
+}
+.card.solved{border-color:var(--cyan);background:rgba(0,40,45,.6)}
+.card.solved::before{
+  content:'✓ SOLVED';position:absolute;top:8px;right:8px;
+  font-size:.58rem;color:var(--cyan);letter-spacing:1px;
+  text-shadow:0 0 8px var(--cyan);
+}
+.card h4{font-size:.9rem;margin-bottom:8px;color:#fff;letter-spacing:1px}
+.meta{display:flex;justify-content:space-between;font-size:.65rem;color:var(--green-dim);letter-spacing:1px}
+.tag{padding:1px 7px;border:1px solid currentColor;border-radius:3px}
+.easy{color:#00ff41}.medium{color:var(--yellow)}.hard{color:var(--red)}
+.pts{color:var(--cyan);font-weight:bold}
+
+/* ===== TERMINAL ===== */
+#termOut{
+  padding:10px 12px;height:330px;overflow-y:auto;font-size:.78rem;
+  line-height:1.55;white-space:pre-wrap;word-break:break-word;
+}
+#termOut::-webkit-scrollbar{width:7px}
+#termOut::-webkit-scrollbar-thumb{background:var(--green-dim)}
+.tin{color:#fff}
+.tout{color:var(--green)}
+.terr{color:var(--red)}
+.tok{color:var(--cyan)}
+.twa{color:var(--yellow)}
+.tdim{color:var(--green-dim)}
+.prompt-line{
+  display:flex;align-items:center;gap:6px;padding:9px 12px;
+  border-top:1px solid var(--border);background:rgba(0,255,65,.05);
+}
+.prompt{font-size:.78rem;color:var(--cyan);white-space:nowrap}
+#cmdIn{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--green);font-family:inherit;font-size:.78rem;
+  caret-color:var(--green);
+}
+#cmdIn::placeholder{color:rgba(0,255,65,.3)}
+
+/* ===== MODAL ===== */
+.overlay{
+  position:fixed;inset:0;z-index:50;display:none;
+  align-items:center;justify-content:center;padding:18px;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(4px);
+}
+.overlay.on{display:flex;animation:fade .2s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{
+  width:100%;max-width:560px;border:1px solid var(--green);
+  border-radius:8px;background:#020a03;overflow:hidden;
+  box-shadow:0 0 40px rgba(0,255,65,.45);
+  animation:pop .25s ease;
+}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  background:rgba(0,255,65,.07);font-size:.85rem;letter-spacing:2px;
+}
+.close{background:none;border:1px solid var(--red);color:var(--red);
+  padding:2px 9px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:.75rem}
+.close:hover{background:var(--red);color:#000}
+.modal-body{padding:16px;font-size:.83rem;line-height:1.7}
+.modal-body .lbl2{color:var(--green-dim);font-size:.65rem;letter-spacing:2px;margin-top:14px;display:block}
+.cipher{
+  background:#000;border:1px dashed var(--border);border-radius:5px;
+  padding:12px;margin:8px 0;color:var(--yellow);
+  font-size:.95rem;letter-spacing:2px;word-break:break-all;
+  text-shadow:0 0 10px rgba(255,230,0,.5);
+}
+.hintbox{
+  display:none;margin-top:10px;padding:10px;
+  border-left:3px solid var(--yellow);background:rgba(255,230,0,.07);
+  color:var(--yellow);font-size:.78rem;
+}
+.hintbox.on{display:block;animation:fade .3s}
+.submit-row{display:flex;gap:8px;margin-top:14px}
+#flagIn{
+  flex:1;background:#000;border:1px solid var(--border);border-radius:5px;
+  padding:10px 12px;color:var(--green);font-family:inherit;font-size:.85rem;outline:none;
+}
+#flagIn:focus{border-color:var(--green);box-shadow:0 0 14px rgba(0,255,65,.4)}
+.btn{
+  background:transparent;border:1px solid var(--green);color:var(--green);
+  padding:10px 18px;border-radius:5px;cursor:pointer;font-family:inherit;
+  font-size:.8rem;letter-spacing:2px;transition:.2s;
+}
+.btn:hover{background:var(--green);color:#000;box-shadow:0 0 18px var(--green)}
+.btn.warn{border-color:var(--yellow);color:var(--yellow)}
+.btn.warn:hover{background:var(--yellow);color:#000;box-shadow:0 0 18px var(--yellow)}
+.result{margin-top:10px;font-size:.82rem;min-height:20px;letter-spacing:1px}
+.ok{color:var(--green);text-shadow:0 0 10px var(--green)}
+.bad{color:var(--red);text-shadow:0 0 10px var(--red)}
+
+/* ===== TOAST ===== */
+#toast{
+  position:fixed;top:20px;left:50%;transform:translate(-50%,-140%);
+  z-index:99;padding:12px 24px;border-radius:6px;
+  background:#020a03;border:1px solid var(--green);color:var(--green);
+  font-size:.82rem;letter-spacing:2px;transition:.4s;
+  box-shadow:0 0 30px rgba(0,255,65,.6);
+}
+#toast.on{transform:translate(-50%,0)}
+footer{text-align:center;padding:20px;font-size:.68rem;color:var(--green-dim);letter-spacing:2px}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+<div id="toast"></div>
+
+<div class="wrap">
+  <header>
+    <div class="glitch" data-text="H4CK3R_L4B">H4CK3R_L4B</div>
+    <div class="subtitle">[ ETHICAL HACKING PRACTICE TERMINAL ]<span class="blink">_</span></div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="lbl">SCORE</div><div class="val" id="scoreVal">0</div></div>
+    <div class="stat"><div class="lbl">SOLVED</div><div class="val" id="solvedVal">0 / 9</div></div>
+    <div class="stat"><div class="lbl">RANK</div><div class="val" id="rankVal">SCRIPT KIDDIE</div></div>
+    <div class="stat"><div class="lbl">ACCURACY</div><div class="val" id="accVal">0%</div></div>
+    <div id="barWrap"><div id="bar"></div></div>
+  </div>
+
+  <div class="main">
+    <!-- CHALLENGES -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+        <span style="margin-left:8px">~/challenges</span>
+      </div>
+      <div class="cards" id="cards"></div>
+    </div>
+
+    <!-- TERMINAL -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+        <span style="margin-left:8px">root@h4ck3r-lab: ~</span>
+      </div>
+      <div id="termOut"></div>
+      <div class="prompt-line">
+        <span class="prompt">root@lab:~$</span>
+        <input id="cmdIn" autocomplete="off" spellcheck="false" placeholder="type 'help' ...">
+      </div>
+    </div>
+  </div>
+
+  <footer>// শুধুমাত্র শেখার জন্য — নিজের সিস্টেমে বা অনুমতি নিয়ে practice করো //</footer>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <span id="mTitle">CHALLENGE</span>
+      <button class="close" onclick="closeModal()">✕ CLOSE</button>
+    </div>
+    <div class="modal-body">
+      <div id="mDesc"></div>
+      <span class="lbl2">▸ CIPHER / DATA</span>
+      <div class="cipher" id="mCipher"></div>
+      <span class="lbl2">▸ DIFFICULTY / POINTS</span>
+      <div style="margin-top:6px" id="mMeta"></div>
+      <button class="btn warn" style="margin-top:12px;font-size:.7rem;padding:6px 14px"
+              onclick="showHint()">? HINT</button>
+      <div class="hintbox" id="mHint"></div>
+      <span class="lbl2">▸ SUBMIT ANSWER (decoded text)</span>
+      <div class="submit-row">
+        <input id="flagIn" placeholder="এখানে decoded answer লেখো..." autocomplete="off">
+        <button class="btn" onclick="submitFlag()">SUBMIT</button>
+      </div>
+      <div class="result" id="mResult"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   MATRIX RAIN
+============================================================ */
+const cvs = document.getElementById('matrix');
+const ctx = cvs.getContext('2d');
+let cols, drops, FS = 16;
+const GLYPHS = 'アカサタナハマヤラワ0123456789ABCDEF<>{}[]/\\$#@!%&*+=';
+function sizeCanvas(){
+  cvs.width = innerWidth; cvs.height = innerHeight;
+  cols = Math.floor(cvs.width / FS);
+  drops = new Array(cols).fill(1).map(()=>Math.random()*cvs.height/FS);
+}
+sizeCanvas();
+addEventListener('resize', sizeCanvas);
+function rain(){
+  ctx.fillStyle = 'rgba(0,0,0,0.07)';
+  ctx.fillRect(0,0,cvs.width,cvs.height);
+  ctx.font = FS + 'px monospace';
+  for(let i=0;i<drops.length;i++){
+    const ch = GLYPHS[Math.floor(Math.random()*GLYPHS.length)];
+    const y = drops[i]*FS;
+    ctx.fillStyle = Math.random() > 0.97 ? '#ccffcc' : '#00ff41';
+    ctx.fillText(ch, i*FS, y);
+    if(y > cvs.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(rain, 50);
+
+/* ============================================================
+   CHALLENGE DATA
+============================================================ */
+const CHALLENGES = [
+  {
+    id:1, title:"Caesar's Secret", cat:"CRYPTO", diff:"Easy", pts:100,
+    desc:"Julius Caesar তাঁর গোপন message-এর প্রতিটি letter কে <b>3 ঘর সামনে</b> সরিয়ে encrypt করতেন।<br>নিচের cipher decode করে আসল word বের করো।",
+    cipher:"KHOOR",
+    hint:"প্রতিটি letter 3 ঘর পিছনে নাও → K→H, H→E, O→L ...",
+    answers:["hello"]
+  },
+  {
+    id:2, title:"Base64 Vault", cat:"ENCODING", diff:"Easy", pts:100,
+    desc:"Base64 হলো একটি encoding scheme (encryption না)। এটি decode করলেই আসল text পাওয়া যায়।",
+    cipher:"aGFja2Vy",
+    hint:"Base64 decode tool ব্যবহার করো, অথবা মনে রাখো: 'aGFja2Vy' = 8 character।",
+    answers:["hacker"]
+  },
+  {
+    id:3, title:"ROT13 Classic", cat:"CRYPTO", diff:"Easy", pts:100,
+    desc:"ROT13 একটি simple substitution cipher — প্রতিটি letter কে 13 ঘর rotate করা হয়।<br>(A→N, B→O ...)",
+    cipher:"URYYB",
+    hint:"13 ঘর পিছনে সরাও। U→H, R→E, Y→L ...",
+    answers:["hello"]
+  },
+  {
+    id:4, title:"Binary Whisper", cat:"BINARY", diff:"Easy", pts:150,
+    desc:"Computer শুধু 0 আর 1 বোঝে। নিচের binary কে ASCII text এ convert করো।<br><i>টিপস: প্রতি 8 bit = 1 character</i>",
+    cipher:"01001000 01000001 01000011 01001011",
+    hint:"01001000 = 72 = 'H' (ASCII table দেখো)",
+    answers:["hack"]
+  },
+  {
+    id:5, title:"Hex Trail", cat:"ENCODING", diff:"Medium", pts:150,
+    desc:"Hexadecimal (base-16) এ encode করা একটা message। Decode করে flag বের করো।",
+    cipher:"48 41 43 4B 45 52",
+    hint:"0x48 = 72 = 'H'। প্রতিটি hex byte কে ASCII character এ convert করো।",
+    answers:["hacker"]
+  },
+  {
+    id:6, title:"Backwards", cat:"LOGIC", diff:"Medium", pts:150,
+    desc:"কেউ একটি string সম্পূর্ণ উল্টো করে দিয়েছে। আসল word বের করো।",
+    cipher:"rekcah",
+    hint:"শুধু string টা reverse করো।",
+    answers:["hacker"]
+  },
+  {
+    id:7, title:"Morse Code", cat:"CRYPTO", diff:"Medium", pts:200,
+    desc:"Samuel Morse এর বিখ্যাত code। dot (.) আর dash (-) দিয়ে letter গঠিত।<br>Decode করো।",
+    cipher:".... .- -.-. -.-",
+    hint:".... = H , .- = A , -.-. = C , -.- = K",
+    answers:["hack"]
+  },
+  {
+    id:8, title:"ASCII Numbers", cat:"ENCODING", diff:"Medium", pts:200,
+    desc:"প্রতিটি number একটি ASCII character এর decimal মান। Convert করে word বানাও।",
+    cipher:"72 97 99 107 101 114",
+    hint:"97 = 'a' (lowercase), 65 = 'A' (uppercase)। ছোট হাতের অক্ষরে উত্তর দাও।",
+    answers:["hacker"]
+  },
+  {
+    id:9, title:"Atbash Mirror", cat:"CRYPTO", diff:"Hard", pts:250,
+    desc:"Atbash cipher এ alphabet উল্টো করা হয় — A↔Z, B↔Y, C↔X ...<br>Decode করো।",
+    cipher:"SVOOL",
+    hint:"S→H, V→E, O→L, O→L, L→O। অর্থাৎ mirror করে দেখো।",
+    answers:["hello"]
+  }
+];
+
+/* ============================================================
+   STATE
+============================================================ */
+let state = JSON.parse(localStorage.getItem('h4ck3rlab') || 'null') || {
+  solved: [], attempts: 0, correct: 0
+};
+function save(){ localStorage.setItem('h4ck3rlab', JSON.stringify(state)); }
+
+const RANKS = [
+  {min:0,    name:"SCRIPT KIDDIE"},
+  {min:300,  name:"NOVICE"},
+  {min:600,  name:"HACKER"},
+  {min:900,  name:"ELITE HACKER"},
+  {min:1200, name:"CYBER NINJA"},
+  {min:1400, name:"LEGEND"}
+];
+const TOTAL_PTS = CHALLENGES.reduce((a,c)=>a+c.pts,0);
+
+/* ============================================================
+   RENDER
+============================================================ */
+function renderCards(){
+  const box = document.getElementById('cards');
+  box.innerHTML = CHALLENGES.map(c=>{
+    const done = state.solved.includes(c.id);
+    return `<div class="card ${done?'solved':''}" onclick="openModal(${c.id})">
+      <h4>#${String(c.id).padStart(2,'0')} ${c.title}</h4>
+      <div class="meta">
+        <span class="tag ${c.diff.toLowerCase()}">${c.diff.toUpperCase()}</span>
+        <span>${c.cat}</span>
+        <span class="pts">${c.pts} pts</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats(){
+  const solvedList = CHALLENGES.filter(c=>state.solved.includes(c.id));
+  const score = solvedList.reduce((a,c)=>a+c.pts,0);
+  const pct = Math.round((score/TOTAL_PTS)*100);
+  const rank = [...RANKS].reverse().find(r=>score >= r.min).name;
+
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('solvedVal').textContent = `${solvedList.length} / ${CHALLENGES.length}`;
+  document.getElementById('rankVal').textContent = rank;
+  document.getElementById('bar').style.width = pct + '%';
+  const acc = state.attempts ? Math.round((state.correct/state.attempts)*100) : 0;
+  document.getElementById('accVal').textContent = acc + '%';
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+let active = null;
+function openModal(id){
+  active = CHALLENGES.find(c=>c.id === id);
+  document.getElementById('mTitle').textContent = `#${id} :: ${active.title}`;
+  document.getElementById('mDesc').innerHTML = active.desc;
+  document.getElementById('mCipher').textContent = active.cipher;
+  document.getElementById('mMeta').innerHTML =
+    `<span class="tag ${active.diff.toLowerCase()}">${active.diff.toUpperCase()}</span>
+     &nbsp; <span style="color:var(--cyan)">${active.pts} pts</span>
+     &nbsp; <span style="color:var(--green-dim)">${active.cat}</span>`;
+  document.getElementById('mHint').classList.remove('on');
+  document.getElementById('mHint').textContent = '💡 ' + active.hint;
+  document.getElementById('mResult').textContent = '';
+  document.getElementById('flagIn').value = '';
+  document.getElementById('overlay').classList.add('on');
+  setTimeout(()=>document.getElementById('flagIn').focus(), 120);
+}
+function closeModal(){ document.getElementById('overlay').classList.remove('on'); }
+function showHint(){ document.getElementById('mHint').classList.add('on'); }
+
+document.getElementById('overlay').addEventListener('click', e=>{
+  if(e.target.id === 'overlay') closeModal();
+});
+document.getElementById('flagIn').addEventListener('keydown', e=>{
+  if(e.key === 'Enter') submitFlag();
+});
+
+/* ============================================================
+   SUBMIT
+============================================================ */
+function normalize(s){ return s.trim().toLowerCase().replace(/\s+/g,' '); }
+
+function submitFlag(silent){
+  if(!active) return;
+  const val = normalize(document.getElementById('flagIn').value);
+  const res = document.getElementById('mResult');
+  if(!val){ res.className='result bad'; res.textContent='✗ কিছু লেখো!'; return; }
+
+  state.attempts++;
+  const ok = active.answers.some(a => normalize(a) === val);
+
+  if(ok){
+    state.correct++;
+    if(!state.solved.includes(active.id)){
+      state.solved.push(active.id);
+      beep(880, .12);
+      setTimeout(()=>beep(1320,.14), 110);
+      toast(`✔ ACCESS GRANTED :: +${active.pts} PTS`);
+      termWrite(`[+] FLAG ACCEPTED on challenge #${active.id} — +${active.pts} pts`, 'tout');
+    } else {
+      toast('✔ ইতিমধ্যে solve করা হয়েছে');
+    }
+    res.className = 'result ok';
+    res.textContent = '✔ CORRECT! Access granted.';
+    save(); renderCards(); updateStats();
+  } else {
+    beep(180, .18);
+    res.className = 'result bad';
+    res.textContent = '✗ WRONG ANSWER. আবার চেষ্টা করো।';
+    termWrite(`[-] FLAG REJECTED on challenge #${active.id}`, 'terr');
+  }
+  save(); updateStats();
+}
+
+/* ============================================================
+   TOAST + BEEP
+============================================================ */
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('on'), 2600);
+}
+let actx;
+function beep(freq, dur){
+  try{
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type='square'; o.frequency.value=freq;
+    g.gain.setValueAtTime(.05, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime+dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime+dur);
+  }catch(e){}
+}
+
+/* ============================================================
+   TERMINAL
+============================================================ */
+const termOut = document.getElementById('termOut');
+const cmdIn = document.getElementById('cmdIn');
+
+function termWrite(txt, cls){
+  const div = document.createElement('div');
+  div.className = cls || 'tout';
+  div.innerHTML = txt;
+  termOut.appendChild(div);
+  termOut.scrollTop = termOut.scrollHeight;
+}
+function typeLine(txt, cls, delay=18){
+  return new Promise(res=>{
+    const div = document.createElement('div');
+    div.className = cls || 'tout';
+    termOut.appendChild(div);
+    let i = 0;
+    const t = setInterval(()=>{
+      div.textContent = txt.slice(0, ++i);
+      termOut.scrollTop = termOut.scrollHeight;
+      if(i >= txt.length){ clearInterval(t); res(); }
+    }, delay);
+  });
+}
+
+async function bootTerminal(){
+  await typeLine('H4CK3R L4B v1.0 — secure shell initialized.', 'tok', 12);
+  await typeLine('Connection encrypted... [OK]', 'tdim', 8);
+  await typeLine('Type "help" to see available commands.', 'twa', 12);
+  termWrite('');
+  termWrite('<span class="tdim">┌─ AVAILABLE CHALLENGES ─────────────────┐</span>');
+  CHALLENGES.forEach(c=>{
+    const done = state.solved.includes(c.id);
+    termWrite(`  ${done?'<span class="tok">[✓]</span>':'<span class="terr">[ ]</span>'} #${String(c.id).padStart(2,'0')}  ${c.title.padEnd(20,' ')} <span class="tdim">${c.cat} / ${c.pts}pts</span>`);
+  });
+  termWrite('<span class="tdim">└────────────────────────────────────────┘</span>');
+  termWrite('');
+}
+
+const HELP = `
+<span class="tok">╔══════════════ COMMAND LIST ══════════════╗</span>
+  <span class="twa">help</span>              — এই help menu দেখাও
+  <span class="twa">ls</span>                — সব challenges list করো
+  <span class="twa">open &lt;id&gt;</span>         — challenge খোলো (modal)
+  <span class="twa">hint &lt;id&gt;</span>         — challenge এর hint দেখাও
+  <span class="twa">solve &lt;id&gt; &lt;ans&gt;</span>   — সরাসরি answer submit করো
+  <span class="twa">score</span>             — তোমার current score দেখাও
+  <span class="twa">whoami</span>            — user info
+  <span class="twa">banner</span>            — banner দেখাও
+  <span class="twa">clear</span>             — terminal clear করো
+  <span class="twa">reset</span>             — সব progress মুছে ফেলো
+<span class="tok">╚══════════════════════════════════════════╝</span>
+`;
+
+function handleCmd(raw){
+  const input = raw.trim();
+  termWrite(`<span class="prompt">root@lab:~$</span> <span class="tin">${escapeHtml(input)}</span>`);
+  if(!input) return;
+
+  const [cmd, ...args] = input.split(/\s+/);
+  const c = cmd.toLowerCase();
+
+  switch(c){
+    case 'help':
+      termWrite(HELP);
+      break;
+
+    case 'ls':
+      termWrite('<span class="tdim">ID   TITLE                 CAT        DIFF     PTS   STATUS</span>');
+      CHALLENGES.forEach(ch=>{
+        const done = state.solved.includes(ch.id);
+        termWrite(`${String(ch.id).padStart(2,'0')}   ${ch.title.padEnd(21,' ')} ${ch.cat.padEnd(10,' ')} ${ch.diff.padEnd(8,' ')} ${String(ch.pts).padEnd(5,' ')} ${done?'<span class="tok">SOLVED ✓</span>':'<span class="terr">UNSOLVED</span>'}`);
+      });
+      break;
+
+    case 'open': {
+      const id = parseInt(args[0]);
+      const ch = CHALLENGES.find(x=>x.id===id);
+      if(!ch){ termWrite('[-] Challenge পাওয়া যায়নি। "ls" দিয়ে দেখো।','terr'); break; }
+      openModal(id);
+      termWrite(`[+] Opening challenge #${id} :: ${ch.title}...`,'tok');
+      break;
+    }
+
+    case 'hint': {
+      const id = parseInt(args[0]);
+      const ch = CHALLENGES.find(x=>x.id===id);
+      if(!ch){ termWrite('[-] Invalid ID।','terr'); break; }
+      termWrite(`[?] HINT for #${id}: <span class="twa">${ch.hint}</span>`);
+      break;
+    }
+
+    case 'solve': {
+      const id = parseInt(args[0]);
+      const ans = args.slice(1).join(' ');
+      const ch = CHALLENGES.find(x=>x.id===id);
+      if(!ch){ termWrite('[-] Invalid ID। "ls" দিয়ে দেখো।','terr'); break; }
+      if(!ans){ termWrite('[-] Usage: solve <id> <answer>','terr'); break; }
+      if(state.solved.includes(id)){ termWrite('[i] এটা তো আগেই solve করা!','twa'); break; }
+
+      state.attempts++;
+      const ok = ch.answers.some(a=>normalize(a)===normalize(ans));
+      if(ok){
+        state.correct++;
+        state.solved.push(id);
+        save(); renderCards(); updateStats();
+        termWrite(`[+] ✔ CORRECT! Flag accepted. +${ch.pts} pts`,'tok');
+        toast(`✔ SOLVED :: ${ch.title} +${ch.pts} PTS`);
+        beep(880,.12); setTimeout(()=>beep(1320,.14),110);
+      } else {
+        save(); updateStats();
+        termWrite('[-] ✗ WRONG ANSWER. আবার চেষ্টা করো।','terr');
+        beep(180,.18);
+      }
+      break;
+    }
+
+    case 'score': {
+      const solvedList = CHALLENGES.filter(x=>state.solved.includes(x.id));
+      const score = solvedList.reduce((a,x)=>a+x.pts,0);
+      const rank = [...RANKS].reverse().find(r=>score>=r.min).name;
+      termWrite(`<span class="tok">┌─ STATS ────────────────┐</span>`);
+      termWrite(`  SCORE   : <span class="tok">${score} / ${TOTAL_PTS}</span>`);
+      termWrite(`  SOLVED  : <span class="tok">${solvedList.length} / ${CHALLENGES.length}</span>`);
+      termWrite(`  RANK    : <span class="twa">${rank}</span>`);
+      termWrite(`  ACCURACY: <span class="tok">${state.attempts?Math.round(state.correct/state.attempts*100):0}%</span>`);
+      termWrite(`<span class="tok">└────────────────────────┘</span>`);
+      break;
+    }
+
+    case 'whoami':
+      termWrite(`root<span class="tdim">@</span>h4ck3r-lab`);
+      termWrite(`<span class="tdim">uid=1337(learner) gid=1337(ethical) groups=cyber,security</span>`);
+      termWrite(`<span class="twa">Status: LEARNING MODE — শুধু শেখার জন্য practice করো!</span>`);
+      break;
+
+    case 'banner':
+      termWrite(`<span class="tok">
+ ██╗  ██╗██╗  ██╗ ██████╗██╗  ██╗██████╗ ██╗      █████╗ ██████╗
+ ██║  ██║██║  ██║██╔════╝██║ ██╔╝██╔══██╗██║     ██╔══██╗██╔══██╗
+ ███████║███████║██║     █████╔╝ ██████╔╝██║     ███████║██████╔╝
+ ██╔══██║╚════██║██║     ██╔═██╗ ██╔══██╗██║     ██╔══██║██╔══██╗
+ ██║  ██║     ██║╚██████╗██║  ██╗██║  ██║███████╗██║  ██║██████╔╝
+ ╚═╝  ╚═╝     ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝
+      </span>`);
+      break;
+
+    case 'clear':
+      termOut.innerHTML = '';
+      break;
+
+    case 'reset':
+      state = {solved:[], attempts:0, correct:0};
+      save(); renderCards(); updateStats();
+      termWrite('[!] সব progress reset হয়েছে।','twa');
+      toast('PROGRESS RESET');
+      break;
+
+    default:
+      termWrite(`[-] command not found: <span class="terr">${escapeHtml(c)}</span> — "help" টাইপ করো`,'terr');
+  }
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+}
+
+cmdIn.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){
+    const v = cmdIn.value;
+    cmdIn.value = '';
+    handleCmd(v);
+    beep(600, .02);
+  }
+});
+document.addEventListener('click', ()=>{
+  if(innerWidth > 960 && !document.getElementById('overlay').classList.contains('on')){
+    cmdIn.focus();
+  }
+});
+
+/* ============================================================
+   INIT
+============================================================ */
+renderCards();
+updateStats();
+bootTerminal();
+</script>
+</body>
+</html>
