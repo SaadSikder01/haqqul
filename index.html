@@ -5,10 +5,14 @@
 <link rel = "icon" href = "icon.png">
 <link rel = "stylesheet" href = "earth.css">
 <style>
-body{
-background-image: url("bg.jpg");
-background-size:cover;
-background-attachment:fixed;
+.bgdesk{
+left:0;
+top:0;
+height:100%;
+width:100%;
+position:fixed;
+z-index:-1300;
+object-fit: cover;
 }
 .navbar{
 height: 80px;
@@ -163,11 +167,7 @@ width:250px;
 opacity: 0.5;
 }
 }
-@media(min-width:480px){
-.bgmobile{
-display:none;
-}
-}
+
 @media(max-width:480px){
 .jwsbtn{
 position: absolute;
@@ -188,7 +188,10 @@ background:red;
 </style>
 </head>
 <body>
-<img src = "backgroundmobile.jpg" class = "bgmobile">
+<video autoplay loop muted class = "bgdesk">
+<source src = "background.mp4">
+</video>
+
 <div class = "navbar">
 <button class = "jwsbtn" onclick = "window.location.href = 'jws.html'">JOIN WITH US</button>
 <img src = "appicon.png" class = "appicon">
